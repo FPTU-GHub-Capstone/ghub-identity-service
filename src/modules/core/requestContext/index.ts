@@ -13,6 +13,6 @@ export * from './types';
 			useClass: RequestContext,
 		},
 	],
-	exports: [T.REQUEST_CONTEXT]
+	exports: [T.REQUEST_CONTEXT],
 })
 export class RequestContextModule {}

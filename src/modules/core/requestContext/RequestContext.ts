@@ -6,7 +6,6 @@ import { IRequestContext } from './types';
 
 @Injectable()
 export class RequestContext implements IRequestContext {
-	
 	public setCorrelationId(correlationId: string): void {
 		httpContext.set('correlationId', correlationId);
 	}
@@ -14,5 +13,4 @@ export class RequestContext implements IRequestContext {
 	public getCorrelationId(): string {
 		return httpContext.get('correlationId');
 	}
-  
 }

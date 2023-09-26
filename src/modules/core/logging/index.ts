@@ -1,10 +1,8 @@
 import { Global, Module } from '@nestjs/common';
-import { WinstonModule ,
+import { WinstonModule,
 	WinstonModuleOptions,
-	utilities as nestWinstonModuleUtilities,
-} from 'nest-winston';
+	utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import { transports as wTransports, format as wFormat } from 'winston';
-import winston from 'winston/lib/winston/config';
 
 import { getAppName } from '../../../shared/environmentUtils';
 import { RequestContextModule } from '../requestContext';
@@ -13,14 +11,13 @@ import { Types as TLog } from './types';
 import { GHubLogger } from './GHubLoggger';
 
 
-
 export * from './types';
 
 const winstonModuleOptions: WinstonModuleOptions = {
 	format: wFormat.combine(
 		wFormat.label({ label: getAppName() }),
 		wFormat.timestamp({
-			format: 'YYYY-MM-DD HH:mm:ss'
+			format: 'YYYY-MM-DD HH:mm:ss',
 		}),
 		wFormat.errors({ stack: true }),
 		wFormat.splat(),
@@ -47,6 +44,6 @@ const winstonModuleOptions: WinstonModuleOptions = {
 			useClass: GHubLogger,
 		},
 	],
-	exports: [TLog.LOGGER_SVC]
+	exports: [TLog.LOGGER_SVC],
 })
 export class LoggingModule {}

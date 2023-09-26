@@ -1,10 +1,7 @@
 import {
-	BadRequestException,
 	Controller,
 	Inject,
-	LoggerService,
 	Post,
-	Req,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 

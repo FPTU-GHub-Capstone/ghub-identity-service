@@ -4,5 +4,5 @@ export const enum Types {
 
 export interface IRequestContext {
 	setCorrelationId(correlationId: string): void;
-	getCorrelationId(): string; 
+	getCorrelationId(): string;
 }

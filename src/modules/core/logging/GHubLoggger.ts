@@ -3,8 +3,9 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 
 import { IRequestContext, Types as TCntx } from '../requestContext';
-import { IGHubLogger } from './types';
 import { getAppInfo } from '../../../shared/environmentUtils';
+
+import { IGHubLogger } from './types';
 
 
 @Injectable()
@@ -19,13 +20,14 @@ export class GHubLogger implements LoggerService, IGHubLogger {
 	}
 
 	public error(message: any, payload?: object) {
-		let errPayload: any
+		let errPayload: any;
 		if (payload && payload instanceof Error && !Object.getOwnPropertyDescriptor(payload, 'stack').enumerable) {
-			Object.defineProperty(payload, 'stack', { enumerable: true })
-			errPayload = this._preparePayload(payload)
-			Object.defineProperty(payload, 'stack', {enumerable: false })
-		} else {
-			errPayload = this._preparePayload(payload)
+			Object.defineProperty(payload, 'stack', { enumerable: true });
+			errPayload = this._preparePayload(payload);
+			Object.defineProperty(payload, 'stack', { enumerable: false });
+		}
+		else {
+			errPayload = this._preparePayload(payload);
 		}
 		this._logger.error(message, errPayload);
 	}
@@ -43,11 +45,11 @@ export class GHubLogger implements LoggerService, IGHubLogger {
 	}
 
 	public _preparePayload(payload: any) {
-		const appInfo = getAppInfo()
-		const logPayload = { 
+		const appInfo = getAppInfo();
+		const logPayload = {
 			correlationId: this._reqCnTx.getCorrelationId(),
 			...appInfo,
-			...payload 
+			...payload,
 		};
 		return logPayload;
 	}

@@ -17,7 +17,7 @@ export class AppModule implements NestModule {
 	public configure(consumer: MiddlewareConsumer) {
 		consumer
 			.apply(
-				httpContext.middleware, 
+				httpContext.middleware,
 				tracerMiddleware,
 				HttpContextMiddleware
 			)

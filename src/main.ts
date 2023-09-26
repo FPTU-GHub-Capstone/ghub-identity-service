@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { NextFunction, Request as XRequest, Response as XResponse } from 'express';
 
 import { AppModule } from './app.module';
 import { Types as TLog } from './modules/core/logging';
@@ -37,7 +37,7 @@ function createHandler(event: string) {
 	};
 }
 
-function setHstsHeader(_req: Request, res: Response, next: () => void) {
+function setHstsHeader(_req: XRequest, res: XResponse, next: NextFunction) {
 	res.setHeader(
 		'Strict-Transport-Security',
 		'max-age=31536000, includeSubDomains',
@@ -45,7 +45,7 @@ function setHstsHeader(_req: Request, res: Response, next: () => void) {
 	next();
 }
 
-function setCSPHeader(_req: Request, res: Response, next: () => void) {
+function setCSPHeader(_req: XRequest, res: XResponse, next: NextFunction) {
 	res.setHeader('Content-Security-Policy', "script-src 'self'");
 	next();
 }
@@ -60,7 +60,7 @@ function handleUnexpectedError(): void {
 async function useGlobalLogger(app: INestApplication) {
 	const logger = await app.resolve(TLog.LOGGER_SVC);
 	app.useLogger(logger);
-} 
+}
 
 async function bootstrap() {
 	handleUnexpectedError;
