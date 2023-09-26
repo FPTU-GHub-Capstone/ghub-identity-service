@@ -8,28 +8,33 @@ const tsParserOpts = {
 };
 
 module.exports = {
-  parser: tsParser,
-  parserOptions: tsParserOpts,
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'eslint:recommended',
-    'plugin:import/recommended',
-  ],
-  plugins: ['@typescript-eslint', '@typescript-eslint/eslint-plugin'],
-  settings: {
-    'import/resolver': {
-      node: {
-        paths: [path.resolve(__dirname)],
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
-      typescript: {
-        project: path.resolve(__dirname, './tsconfig.json'),
-      },
-    },
-  },
   env: {
+    es6: true,
     node: true,
+    jest: true,
   },
+  parser: tsParser,
+  parserOptions: {
+    emaVersion: 2018,
+    sourceType: 'module'
+  },
+  extends: [
+    'google',
+    'plugin:import/errors',
+    'plugin:import/warning',
+  ],
+  // plugins: ['@typescript-eslint', '@typescript-eslint/eslint-plugin'],
+  // settings: {
+  //   'import/resolver': {
+  //     node: {
+  //       paths: [path.resolve(__dirname)],
+  //       extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  //     },
+  //     typescript: {
+  //       project: path.resolve(__dirname, './tsconfig.json'),
+  //     },
+  //   },
+  // },
   rules: {
     'import/newline-after-import': ['error', { count: 2 }],
     'import/order': ['error', { 'newlines-between': 'always' }],
@@ -42,6 +47,9 @@ module.exports = {
     {
       files: ['**/*.{ts,tsx}'],
       rules: {
+        'arrow-spacing': ['error', { before: true, after: true}],
+        'brace-style': ['error', 'stroustrup'],
+        'comma-dangle': ['error', 'always-multiline'],
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [
           'warn', // or 'error'

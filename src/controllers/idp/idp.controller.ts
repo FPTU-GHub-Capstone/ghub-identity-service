@@ -1,19 +1,20 @@
 import {
+	BadRequestException,
 	Controller,
 	Inject,
-	Logger,
 	LoggerService,
 	Post,
+	Req,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { Types as TLog } from '../../modules/core/logging';
+import { IGHubLogger, Types as TLog } from '../../modules/core/logging';
 
 
 @ApiTags('idp')
 @Controller('/v1/idp')
 export class IdpController {
-	constructor(@Inject(TLog.LOGGER_SVC) private readonly _logger: LoggerService) {}
+	constructor(@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger) {}
 
 	@Post('/authorize')
 	public authorize() {

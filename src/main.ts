@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { expressMiddleware as clsMiddleware } from 'cls-rtracer';
 
 import { AppModule } from './app.module';
 import { Types as TLog } from './modules/core/logging';
@@ -58,15 +57,6 @@ function handleUnexpectedError(): void {
 	process.on('SIGTERM', createHandler('SIGTERM'));
 }
 
-function useRequestTracer(app: INestApplication) {
-	app.use(
-		clsMiddleware({
-			useHeader: true,
-			headerName: 'x-correlationid',
-		}),
-	);
-}
-
 async function useGlobalLogger(app: INestApplication) {
 	const logger = await app.resolve(TLog.LOGGER_SVC);
 	app.useLogger(logger);
@@ -75,7 +65,6 @@ async function useGlobalLogger(app: INestApplication) {
 async function bootstrap() {
 	handleUnexpectedError;
 	const app = await NestFactory.create(AppModule);
-	useRequestTracer(app);
 	app.use(setHstsHeader);
 	app.use(setCSPHeader);
 	enableSwagger(app);
