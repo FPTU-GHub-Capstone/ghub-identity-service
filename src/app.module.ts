@@ -6,10 +6,15 @@ import { LoggingModule } from './modules/core/logging';
 import { RequestContextModule } from './modules/core/requestContext';
 import { HttpContextMiddleware } from './common/middlewares/HttpContextMiddleware';
 import { tracerMiddleware } from './common/middlewares/tracerMiddleware';
+import { AppConfigurationModule } from './modules/core/configuration';
 
 
 @Module({
-	imports: [RequestContextModule, LoggingModule],
+	imports: [
+		AppConfigurationModule,
+		RequestContextModule,
+		LoggingModule,
+	],
 	controllers: [HealthCheckController, IdpController],
 	providers: [Logger],
 })

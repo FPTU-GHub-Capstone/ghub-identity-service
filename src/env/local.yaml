@@ -1,0 +1,20 @@
+
+http:
+  host: 'localhost'
+  port: 8080
+
+application:
+  NODE_ENV: 'local'
+  GIT_SHA: '131384ca7831e71d31fa306274a59c17a84462d6'
+  jwt_expires_in: 1000
+  jwt_secret: 'nYZgboJ1LXHL3EhjX64VFwkjq1WJ7bmxRTNavP7rd7NVLtd0hbBENC4crmYH4C7e'
+
+database:
+  mongo:
+    username: '<mongo_username>'
+    password: '<mongo_password>'
+
+firebase:
+  type: '<firebase_type>'
+  project_id: 'firebase_project_id'
+  private_key_id: 'firebase_private_key_id'

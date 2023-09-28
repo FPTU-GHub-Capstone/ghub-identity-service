@@ -9,7 +9,10 @@
       "runtimeArgs": ["run", "start:debug", "--", "--inspect-brk"],
       "console": "integratedTerminal",
       "restart": true,
-      "autoAttachChildProcesses": true
+      "autoAttachChildProcesses": true,
+      "env": {
+        "NODE_ENV": "local"
+      }
     }
   ]
 }
