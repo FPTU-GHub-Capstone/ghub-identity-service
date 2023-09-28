@@ -1,5 +1,6 @@
-import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, ValidationPipe } from '@nestjs/common';
 import * as httpContext from 'express-http-context';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 
 import { HealthCheckController, IdpController } from './controllers';
 import { LoggingModule } from './modules/core/logging';
@@ -7,6 +8,8 @@ import { RequestContextModule } from './modules/core/requestContext';
 import { HttpContextMiddleware } from './common/middlewares/HttpContextMiddleware';
 import { tracerMiddleware } from './common/middlewares/tracerMiddleware';
 import { AppConfigurationModule } from './modules/core/configuration';
+import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
+import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
 
 
 @Module({
@@ -16,7 +19,15 @@ import { AppConfigurationModule } from './modules/core/configuration';
 		LoggingModule,
 	],
 	controllers: [HealthCheckController, IdpController],
-	providers: [Logger],
+	providers: [
+		{
+			provide: APP_FILTER,
+			useClass: AllExceptionsFilter,
+		}, {
+			provide: APP_PIPE,
+			useClass: ValidationPipe,
+		},
+	],
 })
 export class AppModule implements NestModule {
 	public configure(consumer: MiddlewareConsumer) {
@@ -24,6 +35,7 @@ export class AppModule implements NestModule {
 			.apply(
 				httpContext.middleware,
 				tracerMiddleware,
+				AuditMiddleware,
 				HttpContextMiddleware
 			)
 			.forRoutes(IdpController);

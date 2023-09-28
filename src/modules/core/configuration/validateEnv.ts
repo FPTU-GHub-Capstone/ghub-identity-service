@@ -1,4 +1,4 @@
-import { plainToInstance } from 'class-transformer';
+import { Type, plainToInstance } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, Min, ValidateNested, validateSync } from 'class-validator';
 
 
@@ -26,13 +26,15 @@ class ApplicationVariables {
 
 	@IsString()
 	public jwt_secret: string;
-}
+};
 
 class EnvironmentVariables {
 	@ValidateNested()
+	@Type(() => HttpVariables)
 	public http: HttpVariables;
 
 	@ValidateNested()
+	@Type(() => ApplicationVariables)
 	public application: ApplicationVariables;
 }
 
