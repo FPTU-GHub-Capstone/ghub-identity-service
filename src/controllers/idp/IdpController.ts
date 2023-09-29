@@ -1,13 +1,15 @@
 import {
+	Body,
 	Controller,
 	Inject,
 	Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
 
 import { IGHubLogger, Types as TLog } from '../../modules/core/logging';
-import { Types as TConfig, BootConfigService } from '../../modules/core/configuration';
+import { IUserService, Types as TUser } from '../../modules/business/users';
+
+import * as dto from './ipdDto';
 
 
 @ApiTags('idp')
@@ -15,12 +17,12 @@ import { Types as TConfig, BootConfigService } from '../../modules/core/configur
 export class IdpController {
 	constructor(
 		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
-		@Inject(TConfig.CFG_SVC) private readonly _config: BootConfigService
+		@Inject(TUser.USER_SVC) private readonly _usrSvc: IUserService,
 	) {}
 
 	@Post('/authorize')
-	public authorize() {
-		return { status: 'Ok', node_env: this._config.NODE_ENV };
+	public authorize(@Body() loginDto: dto.PasswordLoginDto) {
+		return this._usrSvc.create(loginDto);
 	}
 
 	@Post('/oauth/token')

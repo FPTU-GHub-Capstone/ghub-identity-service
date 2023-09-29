@@ -1,5 +1,5 @@
 export const enum Types {
-	LOGGER_SVC = 'logging:ILoggerService',
+	LOGGER_SVC = 'core:logging:ILoggerService',
 }
 
 export interface IGHubLogger {

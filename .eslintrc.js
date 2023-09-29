@@ -118,7 +118,7 @@ module.exports = {
         'no-invalid-this': 'off',
         '@typescript-eslint/no-invalid-this': ['error'],
         'no-shadow': 'off',
-        '@typescript-eslint/no-shadow': ['error', { builtinGlobals: true, hoist: 'all' }],
+        '@typescript-eslint/no-shadow': 'off',
         '@typescript-eslint/no-var-requires': 'error',
         'semi': ['error', 'always'],
         '@typescript-eslint/member-delimiter-style': [

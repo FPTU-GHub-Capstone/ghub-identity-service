@@ -11,14 +11,24 @@ import { AppConfigurationModule } from './modules/core/configuration';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
 import { MongoModule } from './modules/core/mongo';
+import { UserModule } from './modules/business/users';
 
+
+const coreModules = [
+	AppConfigurationModule,
+	RequestContextModule,
+	LoggingModule,
+	MongoModule,
+];
+
+const businessModules = [
+	UserModule,
+];
 
 @Module({
 	imports: [
-		AppConfigurationModule,
-		RequestContextModule,
-		LoggingModule,
-		MongoModule,
+		...coreModules,
+		...businessModules,
 	],
 	controllers: [HealthCheckController, IdpController],
 	providers: [
@@ -42,4 +52,4 @@ export class AppModule implements NestModule {
 			)
 			.forRoutes(IdpController);
 	}
-}
+};

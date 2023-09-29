@@ -1,5 +1,5 @@
 export const enum Types {
-	REQUEST_CONTEXT = 'requestContext:IRequestContext'
+	REQUEST_CONTEXT = 'core:requestContext:IRequestContext'
 }
 
 export interface IRequestContext {

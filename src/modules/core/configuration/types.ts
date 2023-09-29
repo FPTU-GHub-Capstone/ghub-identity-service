@@ -1,3 +1,3 @@
 export const enum Types {
-	CFG_SVC = 'configuration:BootConfigService'
+	CFG_SVC = 'core:configuration:BootConfigService'
 }
