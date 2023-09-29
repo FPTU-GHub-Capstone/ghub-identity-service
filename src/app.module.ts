@@ -10,6 +10,7 @@ import { tracerMiddleware } from './common/middlewares/tracerMiddleware';
 import { AppConfigurationModule } from './modules/core/configuration';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
+import { MongoModule } from './modules/core/mongo';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
 		AppConfigurationModule,
 		RequestContextModule,
 		LoggingModule,
+		MongoModule,
 	],
 	controllers: [HealthCheckController, IdpController],
 	providers: [

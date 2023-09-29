@@ -1,2 +1,2 @@
-export * from './health.controller';
-export * from './idp/idp.controller';
+export * from './HealthCheckController';
+export * from './idp/IdpController';

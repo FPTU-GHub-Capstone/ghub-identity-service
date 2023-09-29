@@ -1,5 +1,5 @@
 import { Type, plainToInstance } from 'class-transformer';
-import { IsEnum, IsNumber, IsString, Min, ValidateNested, validateSync } from 'class-validator';
+import { IsEnum, IsNumber, IsString, Min, MinLength, ValidateNested, validateSync } from 'class-validator';
 
 
 enum Environment {
@@ -28,6 +28,29 @@ class ApplicationVariables {
 	public jwt_secret: string;
 };
 
+class MongoVariables {
+	@IsString()
+	@MinLength(10)
+	public username: string;
+
+	@IsString()
+	@MinLength(10)
+	public password: string;
+
+	@IsString()
+	@MinLength(30)
+	public connection_string: string;
+
+	@IsString()
+	public name: string;
+}
+
+class DatabaseVariables {
+	@ValidateNested()
+	@Type(() => MongoVariables)
+	public mongo: MongoVariables;
+}
+
 class EnvironmentVariables {
 	@ValidateNested()
 	@Type(() => HttpVariables)
@@ -36,6 +59,10 @@ class EnvironmentVariables {
 	@ValidateNested()
 	@Type(() => ApplicationVariables)
 	public application: ApplicationVariables;
+
+	@ValidateNested()
+	@Type(() => DatabaseVariables)
+	public database: DatabaseVariables;
 }
 
 export default function validateEnv(config: Record<string, unknown>) {
