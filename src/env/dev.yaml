@@ -1,0 +1,22 @@
+
+http:
+  host: 'localhost'
+  port: 8080
+
+application:
+  NODE_ENV: 'local'
+  GIT_SHA: '131384ca7831e71d31fa306274a59c17a84462d6'
+  jwt_expires_in: 1000
+  jwt_secret: 'nYZgboJ1LXHL3EhjX64VFwkjq1WJ7bmxRTNavP7rd7NVLtd0hbBENC4crmYH4C7e'
+
+database:
+  mongo:
+    username: 'ghub-idp-dev'
+    password: 'OGvPQIrVe7XTOcMy'
+    name: 'ghub-idp'
+    connection_string: 'mongodb+srv://ghub-idp-dev:OGvPQIrVe7XTOcMy@dev-cluster.k8wvwii.mongodb.net/?retryWrites=true&w=majority'
+
+firebase:
+  type: '<firebase_type>'
+  project_id: 'firebase_project_id'
+  private_key_id: 'firebase_private_key_id'

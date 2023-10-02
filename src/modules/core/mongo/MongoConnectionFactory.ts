@@ -4,12 +4,12 @@ import {
 	MongooseOptionsFactory,
 } from '@nestjs/mongoose';
 
-import { BootConfigService, Types as TConfig } from '../configuration';
+import { AppConfigurationService, Types as TConfig } from '../configuration';
 
 
 @Injectable()
 export class MongoConnectionFactory implements MongooseOptionsFactory {
-	constructor(@Inject(TConfig.CFG_SVC) private readonly _configSvc: BootConfigService) {}
+	constructor(@Inject(TConfig.CFG_SVC) private readonly _configSvc: AppConfigurationService) {}
 
 	public createMongooseOptions(): MongooseModuleOptions | Promise<MongooseModuleOptions> {
 		return {

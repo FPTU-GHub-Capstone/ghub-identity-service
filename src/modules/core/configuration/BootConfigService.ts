@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 
 @Injectable()
-export class BootConfigService {
+export class AppConfigurationService {
 	constructor(private _configService: ConfigService) {}
 
 	public get GIT_SHA(): string {

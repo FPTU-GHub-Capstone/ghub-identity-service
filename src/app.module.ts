@@ -11,7 +11,7 @@ import { AppConfigurationModule } from './modules/core/configuration';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
 import { MongoModule } from './modules/core/mongo';
-import { UserModule } from './modules/business/users';
+import { UserModule } from './modules/domain/users';
 
 
 const coreModules = [
@@ -21,14 +21,14 @@ const coreModules = [
 	MongoModule,
 ];
 
-const businessModules = [
+const domainModules = [
 	UserModule,
 ];
 
 @Module({
 	imports: [
 		...coreModules,
-		...businessModules,
+		...domainModules,
 	],
 	controllers: [HealthCheckController, IdpController],
 	providers: [

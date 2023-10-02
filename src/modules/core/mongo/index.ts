@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { AppConfigurationModule, BootConfigService } from '../configuration';
+import { AppConfigurationModule, AppConfigurationService } from '../configuration';
 
 import { MongoConnectionFactory } from './MongoConnectionFactory';
 
@@ -11,7 +11,7 @@ import { MongoConnectionFactory } from './MongoConnectionFactory';
 		AppConfigurationModule,
 		MongooseModule.forRootAsync({
 			imports: [AppConfigurationModule],
-			inject: [BootConfigService],
+			inject: [AppConfigurationService],
 			useClass: MongoConnectionFactory,
 		})],
 	providers: [MongoConnectionFactory],

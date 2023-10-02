@@ -7,7 +7,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { IGHubLogger, Types as TLog } from '../../modules/core/logging';
-import { IUserService, Types as TUser } from '../../modules/business/users';
+import { IUserService, Types as TUser } from '../../modules/domain/users';
 
 import * as dto from './ipdDto';
 

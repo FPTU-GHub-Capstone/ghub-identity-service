@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import yamlLoader from './envLoader';
 import { Types as TConfig } from './types';
-import { BootConfigService } from './BootConfigService';
+import { AppConfigurationService } from './BootConfigService';
 import validateEnv from './validateEnv';
 
 
@@ -21,7 +21,7 @@ export * from './types';
 	})],
 	providers: [{
 		provide: TConfig.CFG_SVC,
-		useClass: BootConfigService,
+		useClass: AppConfigurationService,
 	}],
 	exports: [TConfig.CFG_SVC],
 })
