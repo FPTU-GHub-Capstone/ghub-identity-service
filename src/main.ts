@@ -4,7 +4,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NextFunction, Request as XRequest, Response as XResponse } from 'express';
 
 import { AppModule } from './app.module';
-import { Types as TLog } from './modules/core/logging';
+import { IGHubLogger, Types as TLog } from './modules/core/logging';
+import { AppConfigurationService, Types as TConfig } from './modules/core/configuration';
 
 
 function enableSwagger(app: INestApplication): void {
@@ -57,9 +58,17 @@ function handleUnexpectedError(): void {
 	process.on('SIGTERM', createHandler('SIGTERM'));
 }
 
-async function useGlobalLogger(app: INestApplication) {
-	const logger = await app.resolve(TLog.LOGGER_SVC);
+async function setGlobalLogger(app: INestApplication) {
+	const logger: IGHubLogger = await app.resolve(TLog.LOGGER_SVC);
 	app.useLogger(logger);
+}
+
+async function setCorPolicies(app: INestApplication) {
+	const cfgSvc: AppConfigurationService = await app.resolve(TConfig.CFG_SVC);
+	app.enableCors({
+		origin: cfgSvc.feDomain,
+		credentials: true,
+	});
 }
 
 async function bootstrap() {
@@ -68,7 +77,8 @@ async function bootstrap() {
 	app.use(setHstsHeader);
 	app.use(setCSPHeader);
 	enableSwagger(app);
-	await useGlobalLogger(app);
+	await setCorPolicies(app);
+	await setGlobalLogger(app);
 	await app.listen(8080);
 }
 bootstrap();

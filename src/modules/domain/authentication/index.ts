@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 
+
 import { FirebaseAuthStrategy } from './FirebaseAuthStrategy';
-import { FirebaseAuthGuard } from './services/firebase-auth.guard';
+import { FirebaseAuthGuard } from './firebase-auth.guard';
 
 
-export * from './services/firebase-auth.guard';
+export * from './firebase-auth.guard';
 
 @Module({
 	providers: [

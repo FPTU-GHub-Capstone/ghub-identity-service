@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import yamlLoader from './envConfig';
@@ -10,6 +10,7 @@ export * from './AppConfigurationService';
 export * from './types';
 
 
+@Global()
 @Module({
 	imports: [ConfigModule.forRoot({
 		load: [yamlLoader],

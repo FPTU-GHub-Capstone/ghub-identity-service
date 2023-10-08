@@ -31,6 +31,10 @@ class ApplicationVariables {
 	@IsNotEmpty()
 	@IsString()
 	public jwt_secret: string;
+
+	@IsNotEmpty()
+	@IsString()
+	public FE_DOMAIN: string;
 };
 
 class MongoVariables {
@@ -61,6 +65,10 @@ class DatabaseVariables {
 }
 
 class FirebaseVariables {
+	@IsNotEmpty()
+	@IsString()
+	public client_email: string;
+
 	@IsNotEmpty()
 	@IsString()
 	public private_key: string;

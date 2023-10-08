@@ -19,7 +19,7 @@ export class FirebaseAuthStrategy extends PassportStrategy(
 
 	constructor(
 		@Inject(TConfig.CFG_SVC)
-		private readonly _configSvc: AppConfigurationService,
+		private readonly _cfgSvc: AppConfigurationService,
 
 		@Inject(TLog.LOGGER_SVC)
 		private readonly _logger: IGHubLogger
@@ -28,11 +28,11 @@ export class FirebaseAuthStrategy extends PassportStrategy(
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 		});
 		this._firebaseApp = firebase.initializeApp({
-			// credential: firebase.credential.cert({
-			// 	clientEmail: this._configSvc.firebaseClientEmail,
-			// 	privateKey: this._configSvc.firebasePrivateKey,
-			// 	projectId: this._configSvc.firebaseProjectId,
-			// }),
+			credential: firebase.credential.cert({
+				clientEmail: this._cfgSvc.firebaseClientEmail,
+				privateKey: this._cfgSvc.firebasePrivateKey,
+				projectId: this._cfgSvc.firebaseProjectId,
+			}),
 		});
 	}
 

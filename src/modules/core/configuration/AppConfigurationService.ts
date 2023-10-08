@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { sanitizeFirebaseCert } from '../../../shared/miscUtils';
+
 
 @Injectable()
 export class AppConfigurationService {
@@ -8,6 +10,10 @@ export class AppConfigurationService {
 
 	public get gitSha(): string {
 		return this._configService.get('application.GIT_SHA');
+	}
+
+	public get feDomain(): string {
+		return this._configService.get('application.FE_DOMAIN');
 	}
 
 	public get mdbUsername(): string {
@@ -27,14 +33,14 @@ export class AppConfigurationService {
 	}
 
 	public get firebaseClientEmail(): string {
-		return this._configService.get('database.mongo.name');
+		return this._configService.get('firebase.client_email');
 	}
 
 	public get firebasePrivateKey(): string {
-		return this._configService.get('database.mongo.name');
+		return sanitizeFirebaseCert(this._configService.get('firebase.private_key'));
 	}
 
 	public get firebaseProjectId(): string {
-		return this._configService.get('database.mongo.name');
+		return this._configService.get('firebase.project_id');
 	}
 }

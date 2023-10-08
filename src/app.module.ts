@@ -12,6 +12,7 @@ import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
 import { MongoModule } from './modules/core/mongo';
 import { UserModule } from './modules/domain/users';
+import { AuthenticationModule } from './modules/domain/authentication';
 
 
 const coreModules = [
@@ -22,6 +23,7 @@ const coreModules = [
 ];
 
 const domainModules = [
+	AuthenticationModule,
 	UserModule,
 ];
 
