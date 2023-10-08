@@ -11,12 +11,11 @@ application:
 
 database:
   mongo:
-    username: 'ghub-idp-dev'
-    password: 'OGvPQIrVe7XTOcMy'
-    name: 'ghub-idp'
-    connection_string: 'mongodb+srv://ghub-idp-dev:OGvPQIrVe7XTOcMy@dev-cluster.k8wvwii.mongodb.net/?retryWrites=true&w=majority'
+    username: <mongo_username>
+    password: <mongo_password>
+    name: <mongo_db_name>
+    connection_string: <mongo_conn_str>
 
 firebase:
-  type: '<firebase_type>'
-  project_id: 'firebase_project_id'
-  private_key_id: 'firebase_private_key_id'
+  project_id: '<firebase_project_id>'
+  private_key_id: '<firebase_private_key_id>'

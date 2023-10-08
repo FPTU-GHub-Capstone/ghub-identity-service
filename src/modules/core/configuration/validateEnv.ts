@@ -1,5 +1,5 @@
 import { Type, plainToInstance } from 'class-transformer';
-import { IsEnum, IsNumber, IsString, Min, MinLength, ValidateNested, validateSync } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Min, MinLength, ValidateNested, validateSync } from 'class-validator';
 
 
 enum Environment {
@@ -9,40 +9,49 @@ enum Environment {
 }
 
 class HttpVariables {
+	@IsNotEmpty()
 	@IsString()
 	public host: string;
 
+	@IsNotEmpty()
 	@IsNumber()
-	public port: string;
+	public port: number;
 }
 
 class ApplicationVariables {
+	@IsNotEmpty()
 	@IsEnum(Environment)
 	public NODE_ENV: Environment;
 
+	@IsNotEmpty()
 	@IsNumber()
 	@Min(1000)
 	public jwt_expires_in: number;
 
+	@IsNotEmpty()
 	@IsString()
 	public jwt_secret: string;
 };
 
 class MongoVariables {
+	@IsNotEmpty()
 	@IsString()
 	@MinLength(10)
 	public username: string;
 
+	@IsNotEmpty()
 	@IsString()
 	@MinLength(10)
 	public password: string;
 
+	@IsNotEmpty()
 	@IsString()
 	@MinLength(30)
 	public connection_string: string;
 
+	@IsNotEmpty()
 	@IsString()
-	public name: string;
+	public name: string; // database name
 }
 
 class DatabaseVariables {
@@ -51,25 +60,45 @@ class DatabaseVariables {
 	public mongo: MongoVariables;
 }
 
-class EnvironmentVariables {
+class FirebaseVariables {
+	@IsNotEmpty()
+	@IsString()
+	public private_key: string;
+
+	@IsNotEmpty()
+	@IsString()
+	public project_id: string;
+}
+
+export class EnvironmentVariables {
+	@IsNotEmpty()
 	@ValidateNested()
 	@Type(() => HttpVariables)
 	public http: HttpVariables;
 
+	@IsNotEmpty()
 	@ValidateNested()
 	@Type(() => ApplicationVariables)
 	public application: ApplicationVariables;
 
+	@IsNotEmpty()
 	@ValidateNested()
 	@Type(() => DatabaseVariables)
 	public database: DatabaseVariables;
+
+	@IsNotEmpty()
+	@ValidateNested()
+	@Type(() => FirebaseVariables)
+	public firebase: FirebaseVariables;
 }
 
 export default function validateEnv(config: Record<string, unknown>) {
 	const validatedConfig = plainToInstance(
 		EnvironmentVariables,
 		config,
-		{ enableImplicitConversion: true },
+		{
+			enableImplicitConversion: true,
+		},
 	);
 	const errors = validateSync(validatedConfig, {
 		skipMissingProperties: false,

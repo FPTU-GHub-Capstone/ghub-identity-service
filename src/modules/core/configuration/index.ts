@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import yamlLoader from './envLoader';
+import yamlLoader from './envConfig';
 import { Types as TConfig } from './types';
 import { AppConfigurationService } from './AppConfigurationService';
-import validateEnv from './validateEnv';
 
 
 export * from './AppConfigurationService';
@@ -17,7 +16,6 @@ export * from './types';
 		isGlobal: true,
 		cache: true,
 		expandVariables: true,
-		validate: validateEnv,
 	})],
 	providers: [{
 		provide: TConfig.CFG_SVC,

@@ -6,8 +6,8 @@ import { Strategy, ExtractJwt } from 'passport-firebase-jwt';
 import {
 	AppConfigurationService,
 	Types as TConfig,
-} from '../../../../modules/core/configuration';
-import { Types as TLog, IGHubLogger } from '../../../../modules/core/logging';
+} from '../../core/configuration';
+import { Types as TLog, IGHubLogger } from '../../core/logging';
 
 
 @Injectable()
