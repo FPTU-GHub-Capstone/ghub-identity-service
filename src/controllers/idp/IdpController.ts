@@ -1,8 +1,8 @@
 import {
-	Body,
 	Controller,
 	Inject,
 	Post,
+	Req,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -21,8 +21,9 @@ export class IdpController {
 	) {}
 
 	@Post('/authorize')
-	public authorize(@Body() loginDto: dto.PasswordLoginDto) {
-		return this._usrSvc.create(loginDto);
+	public authorize(@Req() req: dto.FirebaseAuthenticatedRequest) {
+		console.log(req.user);
+		// return this._usrSvc.create(loginDto);
 	}
 
 	@Post('/oauth/token')

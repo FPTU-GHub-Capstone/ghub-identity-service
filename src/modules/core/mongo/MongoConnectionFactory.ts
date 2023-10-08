@@ -13,8 +13,8 @@ export class MongoConnectionFactory implements MongooseOptionsFactory {
 
 	public createMongooseOptions(): MongooseModuleOptions | Promise<MongooseModuleOptions> {
 		return {
-			uri: this._configSvc.MDB_CONNECTION_STRING,
-			dbName: this._configSvc.MDB_NAME,
+			uri: this._configSvc.mdbConnectionString,
+			dbName: this._configSvc.mdbDatabaseName,
 		};
 	}
 }

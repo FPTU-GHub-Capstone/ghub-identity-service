@@ -3,11 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 
 import yamlLoader from './envLoader';
 import { Types as TConfig } from './types';
-import { AppConfigurationService } from './BootConfigService';
+import { AppConfigurationService } from './AppConfigurationService';
 import validateEnv from './validateEnv';
 
 
-export * from './BootConfigService';
+export * from './AppConfigurationService';
 export * from './types';
 
 

@@ -9,7 +9,7 @@ import { Types as TLog } from './modules/core/logging';
 
 function enableSwagger(app: INestApplication): void {
 	const config = new DocumentBuilder()
-		.setTitle('GHub Identity Provider Service')
+		.setTitle('GHub Identity Service')
 		.setDescription('GHub Idp')
 		.setVersion('1.0')
 		.addSecurity('Bearer', {
