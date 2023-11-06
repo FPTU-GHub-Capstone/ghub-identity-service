@@ -34,7 +34,7 @@ class ApplicationVariables {
 
 	@IsNotEmpty()
 	@IsString()
-	public FE_DOMAIN: string;
+	public gms_default_scope: string;
 };
 
 class MongoVariables {

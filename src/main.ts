@@ -63,21 +63,12 @@ async function setGlobalLogger(app: INestApplication) {
 	app.useLogger(logger);
 }
 
-async function setCorPolicies(app: INestApplication) {
-	const cfgSvc: AppConfigurationService = await app.resolve(TConfig.CFG_SVC);
-	app.enableCors({
-		origin: cfgSvc.feDomain,
-		credentials: true,
-	});
-}
-
 async function bootstrap() {
 	handleUnexpectedError;
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule, { cors: true });
 	app.use(setHstsHeader);
 	app.use(setCSPHeader);
 	enableSwagger(app);
-	await setCorPolicies(app);
 	await setGlobalLogger(app);
 	await app.listen(8080);
 }

@@ -5,22 +5,22 @@ import { DomainModels } from '..';
 
 import { Types as TUser } from './types';
 import { UserService } from './UserService';
-import { UserSchema } from './userEntity';
+import { UserSchema } from './User';
 
 
 export * from './UserService';
 export * from './types';
-export * from './userEntity';
+export * from './User';
 
 
 @Module({
 	imports: [MongooseModule.forFeature([{ name: DomainModels.USER, schema: UserSchema }])],
 	providers: [
 		{
-			provide: TUser.USER_SVC,
+			provide: TUser.USR_SVC,
 			useClass: UserService,
 		},
 	],
-	exports: [TUser.USER_SVC],
+	exports: [TUser.USR_SVC],
 })
 export class UserModule {}

@@ -7,10 +7,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { FirebaseAuthGuard } from '../../modules/domain/authentication';
-import { IGHubLogger, Types as TLog } from '../../modules/core/logging';
-import { AppConfigurationService, Types as TConfig } from '../../modules/core/configuration';
-import { IUserService, Types as TUser } from '../../modules/domain/users';
+import { FirebaseAuthGuard, IAuthService, Types as TAuth } from '../../modules/domain/auth';
 
 import * as dto from './ipdDto';
 
@@ -19,14 +16,13 @@ import * as dto from './ipdDto';
 @Controller('/v1/idp')
 export class IdpController {
 	constructor(
-		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
-		@Inject(TUser.USER_SVC) private readonly _usrSvc: IUserService,
+		@Inject(TAuth.AUTH_SVC) private readonly _authSvc: IAuthService,
 	) {}
 
 	@UseGuards(FirebaseAuthGuard)
 	@Post('/authorize')
 	public authorize(@Req() req: dto.FirebaseAuthenticatedRequest) {
-		console.log(req.user);
+		return this._authSvc.issueToken(req.user);
 	}
 
 	@Post('/oauth/token')

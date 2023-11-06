@@ -12,8 +12,16 @@ export class AppConfigurationService {
 		return this._configService.get('application.GIT_SHA');
 	}
 
-	public get feDomain(): string {
-		return this._configService.get('application.FE_DOMAIN');
+	public get gmsDefaultScope(): string {
+		return this._configService.get('application.gms_default_scope');
+	}
+
+	public get jwtExpiresIn(): number {
+		return this._configService.get('application.jwt_expires_in');
+	}
+
+	public get jwtSecret(): string {
+		return this._configService.get('application.jwt_secret');
 	}
 
 	public get mdbUsername(): string {

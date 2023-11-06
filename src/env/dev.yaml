@@ -8,6 +8,7 @@ application:
   GIT_SHA: '131384ca7831e71d31fa306274a59c17a84462d6'
   jwt_expires_in: 1000
   jwt_secret: 'nYZgboJ1LXHL3EhjX64VFwkjq1WJ7bmxRTNavP7rd7NVLtd0hbBENC4crmYH4C7e'
+  gms_default_scope: 'games:get games:create games:update games:delete'
 
 database:
   mongo:
