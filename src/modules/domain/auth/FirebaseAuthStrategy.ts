@@ -18,11 +18,8 @@ export class FirebaseAuthStrategy extends PassportStrategy(
 	private _firebaseApp: FirebaseApp.App;
 
 	constructor(
-		@Inject(TConfig.CFG_SVC)
-		private readonly _cfgSvc: AppConfigurationService,
-
-		@Inject(TLog.LOGGER_SVC)
-		private readonly _logger: IGHubLogger
+		@Inject(TConfig.CFG_SVC) private readonly _cfgSvc: AppConfigurationService,
+		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger
 	) {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
