@@ -1,6 +1,6 @@
 import { FilterQuery, ProjectionType, QueryOptions } from 'mongoose';
 
-import { UserDocument } from './User';
+import { User, UserDocument } from './User';
 
 
 export const enum Types {
@@ -16,8 +16,4 @@ export interface IUserService {
 	create(createUserDto: CreateUserDto): Promise<UserDocument>;
 }
 
-export type CreateUserDto = {
-	name: string,
-	email: string,
-	picture: string,
-};
+export type CreateUserDto = Partial<User>

@@ -29,8 +29,9 @@ export type AuthenticatedUser = {
 }
 
 export type TokenPayload = {
-	usr: string,
 	auth_time: number,
 	iat: number,
+	uid: string,
+	usr: string,
 	scp: string[],
 }

@@ -1,5 +1,6 @@
 import {
 	Controller,
+	Get,
 	Inject,
 	Post,
 	Req,
@@ -27,6 +28,11 @@ export class IdpController {
 
 	@Post('/oauth/token')
 	public issueToken() {
+		return { status: 'Ok' };
+	}
+
+	@Get('/profile')
+	public getProfile() {
 		return { status: 'Ok' };
 	}
 }
