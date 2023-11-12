@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 
-import { DomainModels } from '..';
+import { DomainModels } from '../../../common/constants';
 import { IGHubLogger, Types as TLog } from '../../../modules/core/logging';
 
 import { CreateUserDto, IUserService } from './types';
@@ -16,16 +16,19 @@ export class UserService implements IUserService {
 		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
 	) {}
 
-	public async findOne(
-		filter: FilterQuery<UserDocument>,
-		projection?: ProjectionType<UserDocument>,
-		options?: QueryOptions<UserDocument> | null
+	public findOne(
+		filter: FilterQuery<User>,
+		projection?: ProjectionType<User>,
+		options?: QueryOptions<User> | null
 	): Promise<UserDocument> {
-		const user = await this._userModel.findOne(filter, projection, options);
-		return user;
+		return this._userModel.findOne(filter, projection, options);
 	}
 
 	public create(createUserDto: CreateUserDto): Promise<UserDocument> {
 		return this._userModel.create(createUserDto);
+	}
+
+	public count(filter?: FilterQuery<User>): Promise<number> {
+		return this._userModel.count(filter);
 	}
 }

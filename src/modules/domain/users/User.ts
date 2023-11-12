@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+
+import { Client } from '../clients';
+import { DomainModels } from '../../../common/constants';
 
 
 export type UserDocument = HydratedDocument<User>;
@@ -16,13 +19,16 @@ export class User {
 	public picture: string;
 
 	@Prop()
-	public clientId: string;
+	public uid: string;
 
 	@Prop()
-	public clientSecret: string;
+	public username: string;
 
 	@Prop()
-	public scope: string;
+	public password: string;
+
+	@Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: DomainModels.CLIENT }] })
+	public clients: Client[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

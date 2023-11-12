@@ -63,6 +63,11 @@ async function setGlobalLogger(app: INestApplication) {
 	app.useLogger(logger);
 }
 
+async function getPort(app: INestApplication) {
+	const cfgSvc: AppConfigurationService = await app.resolve(TConfig.CFG_SVC);
+	return cfgSvc.port || 8080;
+}
+
 async function bootstrap() {
 	handleUnexpectedError;
 	const app = await NestFactory.create(AppModule, { cors: true });
@@ -70,6 +75,7 @@ async function bootstrap() {
 	app.use(setCSPHeader);
 	enableSwagger(app);
 	await setGlobalLogger(app);
-	await app.listen(8080);
+	const port = await getPort(app);
+	await app.listen(port);
 }
 bootstrap();

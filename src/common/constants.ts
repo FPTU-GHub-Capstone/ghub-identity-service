@@ -12,3 +12,8 @@ export enum TokenTypes {
 	BEARER = 'Bearer',
 	MAC = 'MAC',
 }
+
+export const enum DomainModels {
+	USER = 'User',
+	CLIENT = 'Client'
+}

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { DomainModels } from '..';
+import { DomainModels } from '../../../common/constants';
 
 import { Types as TUser } from './types';
 import { UserService } from './UserService';

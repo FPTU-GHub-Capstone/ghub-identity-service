@@ -3,7 +3,7 @@ import { NextFunction, Request as XRequest, Response as XResponse } from 'expres
 import * as joi from 'joi';
 import * as rTracer from 'cls-rtracer';
 
-import { RequestHeaders } from '../contants';
+import { RequestHeaders } from '../constants';
 import { IRequestContext, Types as TCntx } from '../../modules/core/requestContext/types';
 
 

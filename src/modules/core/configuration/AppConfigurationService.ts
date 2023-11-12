@@ -8,6 +8,10 @@ import { sanitizeFirebaseCert } from '../../../shared/miscUtils';
 export class AppConfigurationService {
 	constructor(private _configService: ConfigService) {}
 
+	public get port(): string {
+		return this._configService.get('http.port');
+	}
+
 	public get gitSha(): string {
 		return this._configService.get('application.GIT_SHA');
 	}

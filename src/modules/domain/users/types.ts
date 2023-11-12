@@ -9,11 +9,12 @@ export const enum Types {
 
 export interface IUserService {
 	findOne(
-		filter: FilterQuery<UserDocument>,
-		projection?: ProjectionType<UserDocument>,
-		options?: QueryOptions<UserDocument> | null,
+		filter: FilterQuery<User>,
+		projection?: ProjectionType<User>,
+		options?: QueryOptions<User> | null,
 	): Promise<UserDocument>;
 	create(createUserDto: CreateUserDto): Promise<UserDocument>;
+	count(filter?: FilterQuery<User>): Promise<number>;
 }
 
 export type CreateUserDto = Partial<User>
