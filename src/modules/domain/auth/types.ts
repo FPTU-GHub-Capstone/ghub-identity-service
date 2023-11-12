@@ -20,6 +20,8 @@ export type AccessTokenRequest = {
 
 export type IAuthService = {
 	issueToken(authenticatedUser: AuthenticatedUser): Promise<AccessTokenResponse>,
+	login(loginParam: LoginParam): Promise<AccessTokenResponse>,
+	register(registerParam: RegisterParam): Promise<void>,
 }
 
 export type AuthenticatedUser = {
@@ -34,4 +36,14 @@ export type TokenPayload = {
 	uid: string,
 	usr: string,
 	scp: string[],
+}
+
+export type LoginParam = {
+	username: string,
+	password: string,
+}
+
+export class RegisterParam {
+	public username: string;
+	public password: string;
 }

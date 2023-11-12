@@ -29,12 +29,12 @@ export class IdpController {
 
 	@Post('login')
 	public login(@Body() loginDto: dto.LoginDto) {
-		return { status: 'Ok' };
+		return this._authSvc.login(loginDto);
 	}
 
 	@Post('register')
-	public register(@Body() loginDto: dto.RegisterDto) {
-		return { status: 'Ok' };
+	public register(@Body() registerDto: dto.RegisterDto) {
+		return this._authSvc.register(registerDto);
 	}
 
 	@Post('/oauth/token')
