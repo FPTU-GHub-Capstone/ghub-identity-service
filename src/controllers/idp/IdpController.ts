@@ -1,4 +1,5 @@
 import {
+	Body,
 	Controller,
 	Get,
 	Inject,
@@ -24,6 +25,16 @@ export class IdpController {
 	@Post('/authorize')
 	public authorize(@Req() req: dto.FirebaseAuthenticatedRequest) {
 		return this._authSvc.issueToken(req.user);
+	}
+
+	@Post('login')
+	public login(@Body() loginDto: dto.LoginDto) {
+		return { status: 'Ok' };
+	}
+
+	@Post('register')
+	public register(@Body() loginDto: dto.RegisterDto) {
+		return { status: 'Ok' };
 	}
 
 	@Post('/oauth/token')
