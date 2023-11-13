@@ -1,0 +1,8 @@
+services:
+  gis:
+    container_name: gis
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 9101:8080

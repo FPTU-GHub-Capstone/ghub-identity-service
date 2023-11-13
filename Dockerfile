@@ -1,9 +1,8 @@
-FROM node
+FROM node:18-alpine as base
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
 
-WORKDIR /home/app
-
+FROM base as dev
 COPY . .
-
-RUN yarn
-
 CMD ["yarn", "start:dev"]
