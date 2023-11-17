@@ -2,6 +2,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import firebase, { app as FirebaseApp } from 'firebase-admin';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-firebase-jwt';
+import { FIREBASE_STRATEGY_NAME } from 'src/constants';
 
 import {
 	AppConfigurationService,
@@ -13,7 +14,7 @@ import { Types as TLog, IGHubLogger } from '../../core/logging';
 @Injectable()
 export class FirebaseAuthStrategy extends PassportStrategy(
 	Strategy,
-	'firebase-auth',
+	FIREBASE_STRATEGY_NAME,
 ) {
 	private _firebaseApp: FirebaseApp.App;
 

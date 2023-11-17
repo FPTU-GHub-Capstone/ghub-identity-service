@@ -13,6 +13,7 @@ import { AuditMiddleware } from './common/middlewares/AuditMiddleware';
 import { MongoModule } from './modules/core/mongo';
 import { UserModule } from './modules/domain/users';
 import { AuthenticationModule } from './modules/domain/auth';
+import { ClientModule } from './modules/domain/clients';
 
 
 const coreModules = [
@@ -25,6 +26,7 @@ const coreModules = [
 const domainModules = [
 	AuthenticationModule,
 	UserModule,
+	ClientModule,
 ];
 
 @Module({

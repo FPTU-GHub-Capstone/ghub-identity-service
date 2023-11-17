@@ -1,4 +1,4 @@
-import { GrantTypes, TokenTypes } from '../../../common/constants';
+import { GrantTypes, TokenTypes } from '../../../constants';
 
 
 export const enum Types {

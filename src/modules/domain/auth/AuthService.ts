@@ -2,17 +2,13 @@ import { BadRequestException, Inject, Injectable, UnauthorizedException } from '
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 
-import { generateAlphaNumericId, randomHash } from '../../../shared/miscUtils';
 import { IUserService, Types as TUser, UserDocument } from '../users';
 import { AppConfigurationService, Types as TCfg } from '../../core/configuration';
-import { TokenTypes, DomainModels } from '../../../common/constants';
+import { TokenTypes, DomainModels } from '../../../constants';
+import { randomHash } from '../../../shared/miscUtils';
 
 import { AccessTokenResponse, AuthenticatedUser, IAuthService, LoginParam, RegisterParam, TokenPayload } from './types';
 
-
-const CLIENT_ID_SUBSTR_LENGTH = 4;
-const CLIENT_ID_SUBSTR_PARTS = 6;
-const CLIENT_SECRET_LENGTH = 30;
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -76,7 +72,7 @@ export class AuthService implements IAuthService {
 		let usr = await (
 			await this._usrSvc.findOne({ email: authenticatedUser.email })
 		).populate({
-			path: DomainModels.CLIENT,
+			path: 'clients',
 			strictPopulate: false,
 		});
 		if (!usr) {
@@ -84,9 +80,6 @@ export class AuthService implements IAuthService {
 			usr = await this._usrSvc.create({
 				...authenticatedUser,
 				uid,
-				// clientId: this._generateClientId(),
-				// clientSecret: randomHash(CLIENT_SECRET_LENGTH),
-				// scope: this._cfgSvc.gmsDefaultScope,
 			});
 		}
 		usr.clients = usr.clients ?? [];
@@ -94,16 +87,7 @@ export class AuthService implements IAuthService {
 	}
 
 	private async _generateUid() {
-		const numOfUsers = await this._usrSvc.count();
-		return `D${numOfUsers + 1}`;
-	}
-
-	private _generateClientId() {
-		const strArr: string[] = [];
-		for (let i = 0; i < CLIENT_ID_SUBSTR_PARTS; i++) {
-			strArr.push(generateAlphaNumericId(CLIENT_ID_SUBSTR_LENGTH));
-		}
-		return strArr.join('-').toUpperCase();
+		return `D-${randomHash(6)}`;
 	}
 
 	private _genUserToken(user: UserDocument) {

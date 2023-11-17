@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 
-import { DomainModels } from '../../../common/constants';
+import { DomainModels } from '../../../constants';
 import { IGHubLogger, Types as TLog } from '../../../modules/core/logging';
 
 import { CreateUserDto, IUserService } from './types';

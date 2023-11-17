@@ -1,3 +1,6 @@
+import { ApplicationInfo } from '../types';
+
+
 function getAppInfo(): ApplicationInfo {
 	return {
 		environment: process.env.NODE_ENV,

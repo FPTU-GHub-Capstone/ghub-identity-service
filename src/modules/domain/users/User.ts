@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 
 import { Client } from '../clients';
-import { DomainModels } from '../../../common/constants';
+import { DomainModels } from '../../../constants';
 
 
 export type UserDocument = HydratedDocument<User>;

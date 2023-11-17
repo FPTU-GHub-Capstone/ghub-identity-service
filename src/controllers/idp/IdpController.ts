@@ -7,18 +7,29 @@ import {
 	Req,
 	UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { FirebaseAuthGuard, IAuthService, Types as TAuth } from '../../modules/domain/auth';
+import { DomainModels } from '../../constants';
+import { GetUser } from '../../common/decorators';
+import { HttpUser } from '../../types';
+import {
+	FirebaseAuthGuard,
+	IAuthService,
+	JwtAuthGuard,
+	Types as TAuth,
+} from '../../modules/domain/auth';
+import { Types as TUser, UserService } from '../../modules/domain/users';
 
 import * as dto from './ipdDto';
 
 
+@ApiBearerAuth('Bearer')
 @ApiTags('idp')
 @Controller('/v1/idp')
 export class IdpController {
 	constructor(
 		@Inject(TAuth.AUTH_SVC) private readonly _authSvc: IAuthService,
+		@Inject(TUser.USR_SVC) private readonly _usrSvc: UserService,
 	) {}
 
 	@UseGuards(FirebaseAuthGuard)
@@ -27,23 +38,28 @@ export class IdpController {
 		return this._authSvc.issueToken(req.user);
 	}
 
-	@Post('login')
+	@Post('/login')
 	public login(@Body() loginDto: dto.LoginDto) {
 		return this._authSvc.login(loginDto);
 	}
 
-	@Post('register')
+	@Post('/register')
 	public register(@Body() registerDto: dto.RegisterDto) {
 		return this._authSvc.register(registerDto);
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('/oauth/token')
-	public issueToken() {
+	public issueToken(@GetUser() user: HttpUser) {
 		return { status: 'Ok' };
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Get('/profile')
-	public getProfile() {
-		return { status: 'Ok' };
+	public async getProfile(@GetUser() user: HttpUser) {
+		return (await this._usrSvc.findOne({ uid: user.uid }, '-password')).populate({
+			path: 'clients',
+			strictPopulate: false,
+		});
 	}
 }

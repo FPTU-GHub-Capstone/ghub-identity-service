@@ -6,13 +6,16 @@ export type ClientDocument = HydratedDocument<Client>;
 
 @Schema()
 export class Client {
-	@Prop()
+	@Prop({ required: true })
+	public name: string;
+
+	@Prop({ required: true })
 	public clientId: string;
 
-	@Prop()
+	@Prop({ required: true })
 	public clientSecret: string;
 
-	@Prop()
+	@Prop({ required: true })
 	public scope: string;
 }
 

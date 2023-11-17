@@ -17,3 +17,6 @@ export const enum DomainModels {
 	USER = 'User',
 	CLIENT = 'Client'
 }
+
+export const IS_PUBLIC_KEY = 'gis:isPublic';
+export const FIREBASE_STRATEGY_NAME = 'firebase-auth';
