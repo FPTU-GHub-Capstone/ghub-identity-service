@@ -13,8 +13,8 @@ export interface IUserService {
 		projection?: ProjectionType<User>,
 		options?: QueryOptions<User> | null,
 	): Promise<UserDocument>;
-	create(createUserDto: CreateUserDto): Promise<UserDocument>;
+	create(createUserParam: CreateUserParam): Promise<UserDocument>;
 	count(filter?: FilterQuery<User>): Promise<number>;
 }
 
-export type CreateUserDto = Partial<User>
+export type CreateUserParam = Partial<User>

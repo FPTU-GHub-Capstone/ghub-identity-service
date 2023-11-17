@@ -14,6 +14,8 @@ import { MongoModule } from './modules/core/mongo';
 import { UserModule } from './modules/domain/users';
 import { AuthenticationModule } from './modules/domain/auth';
 import { ClientModule } from './modules/domain/clients';
+import { ClientController } from './controllers/idp/ClientController';
+import { GameController } from './controllers/idp/GameController';
 
 
 const coreModules = [
@@ -34,7 +36,12 @@ const domainModules = [
 		...coreModules,
 		...domainModules,
 	],
-	controllers: [HealthCheckController, IdpController],
+	controllers: [
+		HealthCheckController,
+		IdpController,
+		ClientController,
+		GameController,
+	],
 	providers: [
 		{
 			provide: APP_FILTER,

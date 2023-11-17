@@ -5,7 +5,7 @@ import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 import { DomainModels } from '../../../constants';
 import { IGHubLogger, Types as TLog } from '../../../modules/core/logging';
 
-import { CreateUserDto, IUserService } from './types';
+import { CreateUserParam, IUserService } from './types';
 import { User, UserDocument } from './User';
 
 
@@ -24,8 +24,8 @@ export class UserService implements IUserService {
 		return this._userModel.findOne(filter, projection, options);
 	}
 
-	public create(createUserDto: CreateUserDto): Promise<UserDocument> {
-		return this._userModel.create(createUserDto);
+	public create(createUserParam: CreateUserParam): Promise<UserDocument> {
+		return this._userModel.create(createUserParam);
 	}
 
 	public count(filter?: FilterQuery<User>): Promise<number> {

@@ -23,4 +23,18 @@ function randomHash(length: number) {
 	return crypto.randomBytes(length).toString('hex');
 }
 
-export { isNil, generateAlphaNumericId, randomHash, sanitizeFirebaseCert };
+function removeNullishField<T>(obj: T): T {
+	Object.keys(obj).forEach((key) =>
+	// eslint-disable-next-line eqeqeq
+		obj[key] == undefined ? delete obj[key] : {},
+	);
+	return obj as T;
+}
+
+export {
+	isNil,
+	generateAlphaNumericId,
+	randomHash,
+	removeNullishField,
+	sanitizeFirebaseCert,
+};

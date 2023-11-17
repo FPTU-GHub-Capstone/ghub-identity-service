@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { ApiProperty } from '@nestjs/swagger';
-import { Equals, IsNotEmpty, MaxLength, MinLength, ValidateIf } from 'class-validator';
+import { IsNotEmpty, MaxLength, MinLength, ValidateIf } from 'class-validator';
 import { Match } from 'src/common/decorators';
 
 

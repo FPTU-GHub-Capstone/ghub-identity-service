@@ -10,6 +10,9 @@ export class Client {
 	public name: string;
 
 	@Prop({ required: true })
+	public gameId: string;
+
+	@Prop({ required: true })
 	public clientId: string;
 
 	@Prop({ required: true })
