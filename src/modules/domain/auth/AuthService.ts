@@ -34,7 +34,7 @@ export class AuthService implements IAuthService {
 		const usr = await(
 			await this._usrSvc.findOne({ username: loginParams.username })
 		).populate({
-			path: DomainModels.CLIENT,
+			path: 'clients',
 			strictPopulate: false,
 		});
 		await this._validatePassword(usr, loginParams.password);
