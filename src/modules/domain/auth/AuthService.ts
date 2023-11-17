@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 import { IUserService, Types as TUser, UserDocument } from '../users';
 import { AppConfigurationService, Types as TCfg } from '../../core/configuration';
-import { TokenTypes, DomainModels } from '../../../constants';
+import { TokenTypes } from '../../../constants';
 import { randomHash } from '../../../shared/miscUtils';
 
 import { AccessTokenResponse, AuthenticatedUser, IAuthService, LoginParam, RegisterParam, TokenPayload } from './types';
@@ -37,6 +37,7 @@ export class AuthService implements IAuthService {
 			path: 'clients',
 			strictPopulate: false,
 		});
+		usr.clients = usr.clients ?? [];
 		await this._validatePassword(usr, loginParams.password);
 		const token: AccessTokenResponse = {
 			access_token: this._genUserToken(usr),
