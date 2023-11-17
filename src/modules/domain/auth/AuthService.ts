@@ -31,14 +31,14 @@ export class AuthService implements IAuthService {
 	}
 
 	public async login(loginParams: LoginParam): Promise<AccessTokenResponse> {
-		const usr = await(
+		let usr = await(
 			await this._usrSvc.findOne({ username: loginParams.username })
-		).populate({
+		);
+		await this._validatePassword(usr, loginParams.password);
+		usr = await usr.populate({
 			path: 'clients',
 			strictPopulate: false,
 		});
-		usr.clients = usr.clients ?? [];
-		await this._validatePassword(usr, loginParams.password);
 		const token: AccessTokenResponse = {
 			access_token: this._genUserToken(usr),
 			token_type: TokenTypes.BEARER,
@@ -70,12 +70,8 @@ export class AuthService implements IAuthService {
 	}
 
 	private async _getAuthenticatedUser(authenticatedUser: AuthenticatedUser): Promise<UserDocument> {
-		let usr = await (
-			await this._usrSvc.findOne({ email: authenticatedUser.email })
-		).populate({
-			path: 'clients',
-			strictPopulate: false,
-		});
+		let usr = await this._usrSvc.findOne({ email: authenticatedUser.email });
+
 		if (!usr) {
 			const uid = await this._generateUid();
 			usr = await this._usrSvc.create({
@@ -83,7 +79,10 @@ export class AuthService implements IAuthService {
 				uid,
 			});
 		}
-		usr.clients = usr.clients ?? [];
+		usr = await usr.populate({
+			path: 'clients',
+			strictPopulate: false,
+		});
 		return usr;
 	}
 
