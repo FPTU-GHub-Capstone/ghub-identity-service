@@ -1,10 +1,10 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
 
 
 export class CreateClientDto {
 	@IsNotEmpty()
-	@MinLength(10)
+	@MinLength(5)
 	@ApiProperty()
 	public name: string;
 
@@ -32,7 +32,7 @@ export class CreateClientDto {
 
 export class UpdateClientDto {
 	@IsOptional()
-	@MinLength(10)
+	@MinLength(5)
 	@ApiProperty()
 	public name?: string;
 

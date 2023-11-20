@@ -3,6 +3,8 @@ import {
 	Controller,
 	Delete,
 	Get,
+	HttpCode,
+	HttpStatus,
 	Inject,
 	Param,
 	Post,
@@ -57,7 +59,8 @@ export class ClientController {
 	}
 
 	@Delete(':id')
+	@HttpCode(HttpStatus.NO_CONTENT)
 	public async delete(@GetUser() user: HttpUser, @Param('id') id: string) {
-		return this._clientSvc.delete(id);
+		this._clientSvc.delete(id);
 	}
 }
