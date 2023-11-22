@@ -34,18 +34,18 @@ export class IdpController {
 
 	@UseGuards(FirebaseAuthGuard)
 	@Post('authorize')
-	public authorize(@Req() req: dto.FirebaseAuthenticatedRequest) {
-		return this._authSvc.issueToken(req.user);
+	public async authorize(@Req() req: dto.FirebaseAuthenticatedRequest) {
+		return await this._authSvc.issueToken(req.user);
 	}
 
 	@Post('login')
-	public login(@Body() loginDto: dto.LoginDto) {
-		return this._authSvc.login(loginDto);
+	public async login(@Body() loginDto: dto.LoginDto) {
+		return await this._authSvc.login(loginDto);
 	}
 
 	@Post('register')
-	public register(@Body() registerDto: dto.RegisterDto) {
-		return this._authSvc.register(registerDto);
+	public async register(@Body() registerDto: dto.RegisterDto) {
+		return await this._authSvc.register(registerDto);
 	}
 
 	@UseGuards(JwtAuthGuard)

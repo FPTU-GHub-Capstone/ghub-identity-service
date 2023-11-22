@@ -31,28 +31,28 @@ export class ClientController {
 	) {}
 
 	@Get(':id')
-	public getByGame(@Param('id') id: string) {
-		return this._clientSvc.findOne({ clientId: id });
+	public async getByGame(@Param('id') id: string) {
+		return await this._clientSvc.findOne({ clientId: id });
 	}
 
 	@Post()
-	public create(@Body() createClientDto: dto.CreateClientDto) {
+	public async create(@Body() createClientDto: dto.CreateClientDto) {
 		const { scope: reqScp, ...createClientParam } = createClientDto;
 		const scope = reqScp.join(' ');
-		return this._clientSvc.create({
+		return await this._clientSvc.create({
 			...createClientParam,
 			scope,
 		});
 	}
 
 	@Put(':id')
-	public update(
+	public async update(
 	@Param('id') id: string,
 		@Body() updateClientDto: dto.UpdateClientDto,
 	) {
 		const { scope: reqScp, ...updateClientParam } = updateClientDto;
 		const scope = reqScp?.join(' ');
-		return this._clientSvc.update(id, {
+		return await this._clientSvc.update(id, {
 			scope,
 			...updateClientParam,
 		});
@@ -61,6 +61,6 @@ export class ClientController {
 	@Delete(':id')
 	@HttpCode(HttpStatus.NO_CONTENT)
 	public async delete(@GetUser() user: HttpUser, @Param('id') id: string) {
-		this._clientSvc.delete(id);
+		await this._clientSvc.delete(id);
 	}
 }
