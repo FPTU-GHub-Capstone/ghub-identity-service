@@ -13,8 +13,8 @@ export class GameController {
 	) {}
 
 	@Get(':id/clients')
-	public async getClients(@Param('id') id: string) {
-		const clients = await this._clientSvc.findByGame(id);
+	public async getClients(@Param('id') gameId: string) {
+		const clients = await this._clientSvc.find({ gameId });
 		return { clients };
 	}
 }

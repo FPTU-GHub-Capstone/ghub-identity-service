@@ -19,6 +19,9 @@ export class Client {
 	public clientSecret: string;
 
 	@Prop({ required: true })
+	public hashedClientSecret: string;
+
+	@Prop({ required: true })
 	public scope: string;
 }
 

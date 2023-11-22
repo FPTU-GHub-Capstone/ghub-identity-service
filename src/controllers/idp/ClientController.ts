@@ -30,6 +30,11 @@ export class ClientController {
 		@Inject(TClient.CLIENT_SVC) private readonly _clientSvc: IClientService,
 	) {}
 
+	@Get()
+	public async getAll() {
+		return await this._clientSvc.find({});
+	}
+
 	@Get(':id')
 	public async getByGame(@Param('id') id: string) {
 		return await this._clientSvc.findOne({ clientId: id });

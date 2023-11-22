@@ -27,8 +27,8 @@ export class User {
 	@Prop()
 	public password: string;
 
-	@Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: DomainModels.CLIENT }] })
-	public clients: Client[];
+	@Prop({ required: true })
+	public scope: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

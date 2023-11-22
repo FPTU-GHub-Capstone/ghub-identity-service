@@ -1,3 +1,4 @@
+import { HttpUser } from '../../../types';
 import { GrantTypes, TokenTypes } from '../../../constants';
 
 
@@ -19,9 +20,17 @@ export type AccessTokenRequest = {
 }
 
 export type IAuthService = {
-	issueToken(authenticatedUser: AuthenticatedUser): Promise<AccessTokenResponse>,
+	issueUserToken(authenticatedUser: AuthenticatedUser): Promise<AccessTokenResponse>,
 	login(loginParam: LoginParam): Promise<AccessTokenResponse>,
 	register(registerParam: RegisterParam): Promise<void>,
+	issueClientToken(user: HttpUser, issueClientTokenParam: IssueClientTokenParam): Promise<AccessTokenResponse>,
+}
+
+export type IssueClientTokenParam = {
+	grant_type: string,
+	client_id: string,
+	client_secret: string,
+	scope: string,
 }
 
 export type AuthenticatedUser = {
@@ -30,11 +39,20 @@ export type AuthenticatedUser = {
 	picture: string,
 }
 
-export type TokenPayload = {
+export type UserTokenPayload = {
 	auth_time: number,
 	iat: number,
 	uid: string,
 	usr: string,
+	scp: string[],
+}
+
+export type ClientTokenPayload = {
+	auth_time: number,
+	iat: number,
+	uid: string,
+	cid: string,
+	gty: string,
 	scp: string[],
 }
 

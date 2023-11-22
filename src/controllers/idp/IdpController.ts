@@ -35,7 +35,7 @@ export class IdpController {
 	@UseGuards(FirebaseAuthGuard)
 	@Post('authorize')
 	public async authorize(@Req() req: dto.FirebaseAuthenticatedRequest) {
-		return await this._authSvc.issueToken(req.user);
+		return await this._authSvc.issueUserToken(req.user);
 	}
 
 	@Post('login')
@@ -50,8 +50,8 @@ export class IdpController {
 
 	@UseGuards(JwtAuthGuard)
 	@Post('oauth/token')
-	public issueToken(@GetUser() user: HttpUser) {
-		return { status: 'Ok' };
+	public async issueToken(@GetUser() user: HttpUser, @Body() requestTokenDto: dto.RequestTokenDto) {
+		return await this._authSvc.issueClientToken(user, requestTokenDto);
 	}
 
 	@UseGuards(JwtAuthGuard)

@@ -7,7 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 import { UpdateResult, DeleteResult } from 'mongodb';
-import { removeNullishField } from 'src/shared/miscUtils';
+import bcrypt from 'bcryptjs';
 
 import { DomainModels } from '../../../constants';
 import { IGHubLogger, Types as TLog } from '../../../modules/core/logging';
@@ -32,15 +32,23 @@ export class ClientService implements IClientService {
 		return this._clientModel.findOne(filter, projection, options);
 	}
 
-	public findByGame(gameId: string): Promise<ClientDocument[]> {
-		return this._clientModel.find({ gameId });
+	public find(
+		filter: FilterQuery<Client>,
+		projection?: ProjectionType<Client>,
+		options?: QueryOptions<Client>,
+	): Promise<ClientDocument[]> {
+		return this._clientModel.find(filter, projection, options);
 	}
 
 	public async create(
 		createClientParam: CreateClientParam,
 	): Promise<ClientDocument> {
 		await this._validateCreateClientParam(createClientParam);
-		return this._clientModel.create(createClientParam);
+		const hashedClientSecret = await bcrypt.hash(createClientParam.clientSecret, 8);
+		return this._clientModel.create({
+			...createClientParam,
+			hashedClientSecret,
+		});
 	}
 
 	private async _validateCreateClientParam(

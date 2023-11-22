@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { UserModule } from '../users';
+import { ClientModule } from '../clients';
 
 import { FirebaseAuthStrategy } from './FirebaseAuthStrategy';
 import { FirebaseAuthGuard } from './FirebaseAuthGuard';
@@ -23,6 +24,7 @@ export * from './types';
 			global: true,
 		}),
 		UserModule,
+		ClientModule,
 	],
 	providers: [
 		FirebaseAuthStrategy,
