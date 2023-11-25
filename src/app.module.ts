@@ -14,8 +14,8 @@ import { MongoModule } from './modules/core/mongo';
 import { UserModule } from './modules/domain/users';
 import { AuthenticationModule } from './modules/domain/auth';
 import { ClientModule } from './modules/domain/clients';
-import { ClientController } from './controllers/idp/ClientController';
-import { GameController } from './controllers/idp/GameController';
+import { ClientController } from './controllers/clients/ClientController';
+import { GameController } from './controllers/games/GameController';
 
 
 const coreModules = [

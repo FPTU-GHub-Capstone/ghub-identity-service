@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { DomainModels } from '../../constants';
 import { GetUser } from '../../common/decorators';
 import { HttpUser } from '../../types';
 import {

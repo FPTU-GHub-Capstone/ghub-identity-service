@@ -1,11 +1,13 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
+import { Controller, Get, Inject, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { IClientService, Types as TClient } from '../../modules/domain/clients';
+import { JwtAuthGuard } from '../../modules/domain/auth';
 
 
 @ApiBearerAuth('Bearer')
 @ApiTags('game')
+@UseGuards(JwtAuthGuard)
 @Controller('/v1/idp/games')
 export class GameController {
 	constructor(

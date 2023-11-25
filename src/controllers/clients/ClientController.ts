@@ -12,10 +12,10 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { GetUser } from 'src/common/decorators';
-import { HttpUser } from 'src/types';
-import { JwtAuthGuard } from 'src/modules/domain/auth';
 
+import { GetUser } from '../../common/decorators';
+import { HttpUser } from '../../types';
+import { JwtAuthGuard } from '../../modules/domain/auth';
 import { IClientService, Types as TClient } from '../../modules/domain/clients';
 
 import * as dto from './clientDto';
