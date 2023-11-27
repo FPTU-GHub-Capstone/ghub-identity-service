@@ -16,6 +16,7 @@ import { AuthenticationModule } from './modules/domain/auth';
 import { ClientModule } from './modules/domain/clients';
 import { ClientController } from './controllers/clients/ClientController';
 import { GameController } from './controllers/games/GameController';
+import { UserController } from './controllers/users/UserController';
 
 
 const coreModules = [
@@ -41,6 +42,7 @@ const domainModules = [
 		IdpController,
 		ClientController,
 		GameController,
+		UserController,
 	],
 	providers: [
 		{

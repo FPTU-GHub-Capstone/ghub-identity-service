@@ -1,11 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
+import { UpdateResult } from 'mongodb';
 
 import { DomainModels } from '../../../constants';
 import { IGHubLogger, Types as TLog } from '../../../modules/core/logging';
 
-import { CreateUserParam, IUserService } from './types';
+import { CreateUserParam, IUserService, UpdateUserParam } from './types';
 import { User, UserDocument } from './User';
 
 
@@ -15,6 +16,35 @@ export class UserService implements IUserService {
 		@InjectModel(DomainModels.USER) private readonly _userModel: Model<User>,
 		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
 	) {}
+
+	public async addScope(uid: string, scope: string[]): Promise<UpdateResult> {
+		const usr = await this.findOne({ uid });
+		if (!usr) throw new NotFoundException('User not exist');
+		return this._userModel.updateOne({ uid }, {
+			scope: usr.scope + ' ' + scope.join(' '),
+		}, {
+			new: true,
+		});
+	}
+
+	public async update(
+		uid: string,
+		updateUserParam: UpdateUserParam,
+	): Promise<UpdateResult> {
+		const usr = await this.findOne({ uid });
+		if (!usr) throw new NotFoundException('User not exist');
+		return this._userModel.updateOne({ uid }, updateUserParam, {
+			new: true,
+		});
+	}
+
+	public find(
+		filter: FilterQuery<User>,
+		projection?: ProjectionType<User>,
+		options?: QueryOptions<User>,
+	): Promise<UserDocument[]> {
+		return this._userModel.find(filter, projection, options);
+	}
 
 	public findOne(
 		filter: FilterQuery<User>,

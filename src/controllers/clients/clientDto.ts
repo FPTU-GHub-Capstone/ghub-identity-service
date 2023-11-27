@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
+import { ArrayNotEmpty, IsNotEmpty, IsOptional, IsString, Length, MinLength } from 'class-validator';
 
 
 export class CreateClientDto {
@@ -23,9 +23,8 @@ export class CreateClientDto {
 	@ApiProperty()
 	public clientSecret: string;
 
-	@IsNotEmpty({
-		each: true,
-	})
+	@IsNotEmpty()
+	@ArrayNotEmpty()
 	@ApiProperty()
 	public scope: string[];
 }
@@ -42,6 +41,7 @@ export class UpdateClientDto {
 	public clientSecret?: string;
 
 	@IsOptional()
+	@ArrayNotEmpty()
 	@ApiProperty()
 	public scope?: string[];
 }
