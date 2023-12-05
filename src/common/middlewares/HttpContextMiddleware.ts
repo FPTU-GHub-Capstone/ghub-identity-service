@@ -3,11 +3,11 @@ import { NextFunction, Request as XRequest, Response as XResponse } from 'expres
 import * as joi from 'joi';
 import * as rTracer from 'cls-rtracer';
 
-import { RequestHeaders } from '../../constants';
+import { Headers } from '../../constants';
 import { IRequestContext, Types as TCntx } from '../../modules/core/requestContext/types';
 
 
-const errMsg = `HTTP header ${RequestHeaders.CORRELATION_ID} must be provided`;
+const errMsg = `HTTP header ${Headers.CORRELATION_ID} must be provided`;
 const schema = joi.string().required().messages({
 	'string.base': errMsg,
 	'string.empty': errMsg,
@@ -19,13 +19,17 @@ export class HttpContextMiddleware implements NestMiddleware {
 	constructor(@Inject(TCntx.REQUEST_CONTEXT) private readonly _reqCnTx: IRequestContext) {}
 
 	public use(req: XRequest, res: XResponse, next: NextFunction) {
-		const correlationId = req.header(RequestHeaders.CORRELATION_ID) ?? <string>rTracer.id();
+		const correlationId = req.header(Headers.CORRELATION_ID) ?? <string>rTracer.id();
 		const { value, error } = schema.validate(correlationId);
 		if (error) {
 			throw new BadRequestException(error.message);
 		}
-		this._reqCnTx.setCorrelationId(value);
-		res.header(RequestHeaders.CORRELATION_ID, correlationId);
+		this._setCorrelationId(res, value);
 		next();
+	}
+
+	private _setCorrelationId(res: XResponse, correlationId: string) {
+		this._reqCnTx.setCorrelationId(correlationId);
+		res.header(Headers.CORRELATION_ID, correlationId);
 	}
 }

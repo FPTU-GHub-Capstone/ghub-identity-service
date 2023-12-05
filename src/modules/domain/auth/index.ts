@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { RequestContextModule } from 'src/modules/core/requestContext';
 
 import { UserModule } from '../users';
 import { ClientModule } from '../clients';
@@ -25,6 +26,7 @@ export * from './types';
 		}),
 		UserModule,
 		ClientModule,
+		RequestContextModule,
 	],
 	providers: [
 		FirebaseAuthStrategy,

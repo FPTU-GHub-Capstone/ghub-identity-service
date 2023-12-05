@@ -1,5 +1,6 @@
-export const enum RequestHeaders {
+export const enum Headers {
 	CORRELATION_ID = 'x-correlationid',
+	AUTHORIZATION = 'Authorization',
 }
 
 export enum GrantTypes {

@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	Delete,
@@ -6,6 +7,7 @@ import {
 	HttpCode,
 	HttpStatus,
 	Inject,
+	NotFoundException,
 	Param,
 	Post,
 	Put,
@@ -17,6 +19,8 @@ import { GetUser } from '../../common/decorators';
 import { HttpUser } from '../../types';
 import { JwtAuthGuard } from '../../modules/domain/auth';
 import { IClientService, Types as TClient } from '../../modules/domain/clients';
+import { IGameService, Types as TExtApi } from '../../modules/externalApi';
+import { IGHubLogger, Types as TLog } from '../../modules/core/logging';
 
 import * as dto from './clientDto';
 
@@ -28,6 +32,8 @@ import * as dto from './clientDto';
 export class ClientController {
 	constructor(
 		@Inject(TClient.CLIENT_SVC) private readonly _clientSvc: IClientService,
+		@Inject(TExtApi.GAME_SVC) private readonly _gameSvc: IGameService,
+		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
 	) {}
 
 	@Get()
@@ -42,12 +48,25 @@ export class ClientController {
 
 	@Post()
 	public async create(@Body() createClientDto: dto.CreateClientDto) {
+		// validate user permission
+		await this._validateGame(createClientDto.clientId);
 		const { scope: reqScp, ...createClientParam } = createClientDto;
 		const scope = reqScp.join(' ');
 		return await this._clientSvc.create({
 			...createClientParam,
 			scope,
 		});
+	}
+
+	private async _validateGame(gameId: string) {
+		try {
+			const game = await this._gameSvc.getGame(gameId);
+			this._logger.log(`Get game:${gameId} successful`, game);
+		}
+		catch (err) {
+			this._logger.error('Get game error', err);
+			throw new NotFoundException('Game not found');
+		}
 	}
 
 	@Put(':id')

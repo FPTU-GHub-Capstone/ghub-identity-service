@@ -12,12 +12,20 @@ export class AppConfigurationService {
 		return this._configService.get('http.port');
 	}
 
+	public get appName(): string {
+		return this._configService.get('application.APP_NAME');
+	}
+
 	public get gitSha(): string {
 		return this._configService.get('application.GIT_SHA');
 	}
 
 	public get gmsDefaultScope(): string {
 		return this._configService.get('application.gms_default_scope');
+	}
+
+	public get gmsUrl(): string {
+		return this._configService.get('application.gms_url');
 	}
 
 	public get jwtExpiresIn(): number {

@@ -24,6 +24,10 @@ class ApplicationVariables {
 	public NODE_ENV: Environment;
 
 	@IsNotEmpty()
+	@IsString()
+	public APP_NAME: string;
+
+	@IsNotEmpty()
 	@IsNumber()
 	@Min(1000)
 	public jwt_expires_in: number;
@@ -35,6 +39,10 @@ class ApplicationVariables {
 	@IsNotEmpty()
 	@IsString()
 	public gms_default_scope: string;
+
+	@IsNotEmpty()
+	@IsString()
+	public gms_url: string;
 };
 
 class MongoVariables {

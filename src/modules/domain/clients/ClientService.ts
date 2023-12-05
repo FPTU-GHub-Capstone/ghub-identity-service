@@ -78,9 +78,17 @@ export class ClientService implements IClientService {
 	): Promise<UpdateResult> {
 		const client = await this.findOne({ clientId });
 		if (!client) throw new NotFoundException('Client not exist');
-		return this._clientModel.updateOne({ clientId }, updateClientParam, {
-			new: true,
-		});
+		let hashedClientSecret = undefined;
+		if (updateClientParam.clientSecret) {
+			hashedClientSecret = await bcrypt.hash(updateClientParam.clientSecret, 8);
+		}
+		return this._clientModel.updateOne(
+			{ clientId },
+			{ ...updateClientParam, hashedClientSecret },
+			{
+				new: true,
+			},
+		);
 	}
 
 	public async delete(clientId: string): Promise<DeleteResult> {

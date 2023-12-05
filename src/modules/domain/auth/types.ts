@@ -24,6 +24,7 @@ export type IAuthService = {
 	login(loginParam: LoginParam): Promise<AccessTokenResponse>,
 	register(registerParam: RegisterParam): Promise<void>,
 	issueClientToken(user: HttpUser, issueClientTokenParam: IssueClientTokenParam): Promise<AccessTokenResponse>,
+	issueServiceToken(scp: string[]): string,
 }
 
 export type IssueClientTokenParam = {
@@ -52,6 +53,15 @@ export type ClientTokenPayload = {
 	iat: number,
 	uid: string,
 	cid: string,
+	gty: string,
+	scp: string[],
+}
+
+
+export type ServiceTokenPayload = {
+	auth_time: number,
+	iat: number,
+	sid: string,
 	gty: string,
 	scp: string[],
 }

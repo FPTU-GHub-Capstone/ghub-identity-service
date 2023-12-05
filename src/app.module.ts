@@ -17,6 +17,7 @@ import { ClientModule } from './modules/domain/clients';
 import { ClientController } from './controllers/clients/ClientController';
 import { GameController } from './controllers/games/GameController';
 import { UserController } from './controllers/users/UserController';
+import { ExternalApiModule } from './modules/externalApi';
 
 
 const coreModules = [
@@ -36,6 +37,7 @@ const domainModules = [
 	imports: [
 		...coreModules,
 		...domainModules,
+		ExternalApiModule,
 	],
 	controllers: [
 		HealthCheckController,
@@ -63,6 +65,6 @@ export class AppModule implements NestModule {
 				AuditMiddleware,
 				HttpContextMiddleware
 			)
-			.forRoutes(IdpController);
+			.forRoutes('*');
 	}
 };

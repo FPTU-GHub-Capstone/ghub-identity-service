@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsNotEmpty, IsOptional, IsString, Length, MinLength } from 'class-validator';
+import { ArrayNotEmpty, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 
 export class CreateClientDto {
@@ -9,7 +9,7 @@ export class CreateClientDto {
 	public name: string;
 
 	@IsNotEmpty()
-	@Length(36)
+	@MinLength(20)
 	@ApiProperty()
 	public gameId: string;
 

@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 
 import { IUserService, Types as TUser, UserDocument } from '../users';
 import { AppConfigurationService, Types as TCfg } from '../../core/configuration';
-import { TokenTypes } from '../../../constants';
+import { GrantTypes, TokenTypes } from '../../../constants';
 import { randomHash } from '../../../shared/miscUtils';
 import { HttpUser } from '../../../types';
 import { IClientService, Types as TClient } from '../clients';
@@ -19,6 +19,7 @@ import {
 	IssueClientTokenParam,
 	LoginParam,
 	RegisterParam,
+	ServiceTokenPayload,
 	UserTokenPayload,
 } from './types';
 
@@ -66,7 +67,6 @@ export class AuthService implements IAuthService {
 			throw new UnauthorizedException('Request scopes exceed those granted by  the resource owner');
 		}
 	}
-
 
 	public async register(registerParams: RegisterParam): Promise<void> {
 		const usr = await this._usrSvc.findOne({ username: registerParams.username });
@@ -161,6 +161,18 @@ export class AuthService implements IAuthService {
 			cid: clientId,
 			gty: grantType,
 			scp: scope.split(' '),
+		};
+		return this._jwtService.sign(payload);
+	}
+
+	public issueServiceToken(scp: string[]): string {
+		const now = Date.now();
+		const payload: ServiceTokenPayload = {
+			auth_time: now,
+			iat: now,
+			sid: this._cfgSvc.appName,
+			gty: GrantTypes.CLIENT_CREDENTIALS,
+			scp: scp,
 		};
 		return this._jwtService.sign(payload);
 	}

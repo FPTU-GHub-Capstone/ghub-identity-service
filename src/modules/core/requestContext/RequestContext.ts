@@ -10,7 +10,15 @@ export class RequestContext implements IRequestContext {
 		httpContext.set('correlationId', correlationId);
 	}
 
+	public setScope(scope: string[]): void {
+		httpContext.set('scope', scope);
+	}
+
 	public getCorrelationId(): string {
 		return httpContext.get('correlationId');
+	}
+
+	public getScope(): string[] {
+		return httpContext.get('scope');
 	}
 }
