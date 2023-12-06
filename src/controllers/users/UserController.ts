@@ -5,12 +5,14 @@ import {
 	Inject,
 	Param,
 	Put,
+	Query,
 	UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { FilterQuery } from 'mongoose';
 
 import { JwtAuthGuard } from '../../modules/domain/auth';
-import { IUserService, Types as TUser } from '../../modules/domain/users';
+import { IUserService, Types as TUser, User } from '../../modules/domain/users';
 
 import * as dto from './userDto';
 
@@ -24,9 +26,19 @@ export class UserController {
 		@Inject(TUser.USR_SVC) private readonly _usrSvc: IUserService,
 	) {}
 
+	@ApiQuery({
+		name: 'email',
+		type: String,
+		required: false,
+	})
 	@Get()
-	public async getAll() {
-		return await this._usrSvc.find({});
+	public async getAll(@Query('email') email?: string) {
+		const filter: FilterQuery<User> = {};
+		email && Object.assign(filter, { email: {
+			$regex: email,
+		} });
+		const users = await this._usrSvc.find(filter);
+		return { users };
 	}
 
 	@Put(':uid/add-scope')

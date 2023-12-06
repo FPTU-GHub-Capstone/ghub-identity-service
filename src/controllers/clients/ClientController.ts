@@ -38,7 +38,8 @@ export class ClientController {
 
 	@Get()
 	public async getAll() {
-		return await this._clientSvc.find({});
+		const clients = await this._clientSvc.find({});
+		return { clients };
 	}
 
 	@Get(':id')

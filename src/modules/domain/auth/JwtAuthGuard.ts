@@ -41,7 +41,12 @@ export class JwtAuthGuard implements CanActivate {
 		try {
 			const payload = await this._jwtService.verifyAsync(token, {
 				secret: this._cfgSvc.jwtSecret,
+				// ignoreExpiration: false, // some issue, verifyAsync not verify token is expired
 			});
+			if (payload.exp < Date.now()) {
+				throw new UnauthorizedException();
+			}
+
 			request['user'] = payload;
 			this._reqCnTx.setScope(payload.scp);
 		}
