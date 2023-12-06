@@ -54,11 +54,14 @@ export class IdpController {
 	}
 
 	@UseGuards(JwtAuthGuard)
+	@Post('oauth/token/exchange')
+	public async exchangeToken(@GetUser() user: HttpUser) {
+		return await this._authSvc.exchangeToken(user);
+	}
+
+	@UseGuards(JwtAuthGuard)
 	@Get('profile')
 	public async getProfile(@GetUser() user: HttpUser) {
-		return (await this._usrSvc.findOne({ uid: user.uid }, '-password')).populate({
-			path: 'clients',
-			strictPopulate: false,
-		});
+		return await this._usrSvc.findOne({ uid: user.uid }, '-password');
 	}
 }

@@ -33,6 +33,17 @@ export class AuthService implements IAuthService {
 		@Inject(TCfg.CFG_SVC) private readonly _cfgSvc: AppConfigurationService,
 	) {}
 
+	public async exchangeToken(user: HttpUser): Promise<AccessTokenResponse> {
+		const usr = await this._usrSvc.findOne({ uid: user.uid });
+		const token: AccessTokenResponse = {
+			access_token: this._genUserToken(usr),
+			token_type: TokenTypes.BEARER,
+			expires_in: this._cfgSvc.jwtExpiresIn,
+			scope: usr.scope,
+		};
+		return token;
+	}
+
 	public async issueClientToken(
 		user: HttpUser,
 		issueClientTokenParam: IssueClientTokenParam,
@@ -126,10 +137,6 @@ export class AuthService implements IAuthService {
 				scope: this._cfgSvc.gmsDefaultScope,
 			});
 		}
-		usr = await usr.populate({
-			path: 'clients',
-			strictPopulate: false,
-		});
 		return usr;
 	}
 

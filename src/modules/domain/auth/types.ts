@@ -20,6 +20,7 @@ export type AccessTokenRequest = {
 }
 
 export type IAuthService = {
+	exchangeToken(user: HttpUser): Promise<AccessTokenResponse>,
 	issueUserToken(authenticatedUser: AuthenticatedUser): Promise<AccessTokenResponse>,
 	login(loginParam: LoginParam): Promise<AccessTokenResponse>,
 	register(registerParam: RegisterParam): Promise<void>,
