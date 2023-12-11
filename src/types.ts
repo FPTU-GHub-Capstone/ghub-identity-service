@@ -6,6 +6,5 @@ export type ApplicationInfo = {
 
 export type HttpUser = {
 	uid: string,
-	usr: string,
 	scp: string[],
 };
