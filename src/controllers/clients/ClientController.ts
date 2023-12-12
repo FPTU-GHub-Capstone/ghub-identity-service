@@ -49,7 +49,7 @@ export class ClientController {
 	@Post()
 	public async create(@Body() createClientDto: dto.CreateClientDto) {
 		// validate user permission
-		await this._validateGame(createClientDto.clientId);
+		await this._validateGame(createClientDto.gameId);
 		const { scope: reqScp, ...createClientParam } = createClientDto;
 		const scope = reqScp.join(' ');
 		return await this._clientSvc.create({
