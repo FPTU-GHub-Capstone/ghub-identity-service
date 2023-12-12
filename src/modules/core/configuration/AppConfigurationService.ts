@@ -37,11 +37,27 @@ export class AppConfigurationService {
 	}
 
 	public get writeUnitPrice(): number {
-		return parseFloat('application.wu_price');
+		return parseFloat(this._configService.get('application.wu_price'));
 	}
 
 	public get readUnitPrice(): number {
-		return parseFloat('application.ru_price');
+		return parseFloat(this._configService.get('application.ru_price'));
+	}
+
+	public get vnpayUrl(): string {
+		return this._configService.get('vnpay.VNP_URL');
+	}
+
+	public get vnpayReturnUrl(): string {
+		return this._configService.get('vnpay.VNP_RETURN_URL');
+	}
+
+	public get vnpayHashSecret(): string {
+		return this._configService.get('vnpay.VNP_HASHSECRET');
+	}
+
+	public get vnpayTmnCode(): string {
+		return this._configService.get('vnpay.VNP_TMNCODE');
 	}
 
 	public get mdbUsername(): string {

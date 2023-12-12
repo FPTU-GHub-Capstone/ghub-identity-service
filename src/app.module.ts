@@ -20,6 +20,8 @@ import { UserController } from './controllers/users/UserController';
 import { ExternalApiModule } from './modules/externalApi';
 import { BillModule } from './modules/domain/bills';
 import { BillController } from './controllers/bills/BillController';
+import { PaymentController } from './controllers/payments/PaymentController';
+import { PaymentModule } from './modules/domain/payments';
 
 
 const coreModules = [
@@ -34,6 +36,17 @@ const domainModules = [
 	UserModule,
 	ClientModule,
 	BillModule,
+	PaymentModule,
+];
+
+const ghubControllers: any[] = [
+	HealthCheckController,
+	IdpController,
+	ClientController,
+	GameController,
+	UserController,
+	BillController,
+	PaymentController,
 ];
 
 @Module({
@@ -42,14 +55,7 @@ const domainModules = [
 		...domainModules,
 		ExternalApiModule,
 	],
-	controllers: [
-		HealthCheckController,
-		IdpController,
-		ClientController,
-		GameController,
-		UserController,
-		BillController,
-	],
+	controllers: ghubControllers,
 	providers: [
 		{
 			provide: APP_FILTER,

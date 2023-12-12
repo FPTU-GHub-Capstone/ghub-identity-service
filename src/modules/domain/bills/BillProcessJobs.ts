@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 /* eslint-disable max-lines-per-function */
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { CronJob } from 'cron';
@@ -40,13 +41,15 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 			const bills: Bill[] = [];
 			const games = await this._gameSvc.getGames();
 			for (const game of games) {
-				bills.push({
-					gameId: game.id,
-					writeUnits: game.monthlyWriteUnits,
-					readUnits: game.monthlyReadUnits,
-					status: BillStatus.PENDING,
-					time: new Date(),
-				});
+				if (game.monthlyWriteUnits > 0) {
+					bills.push({
+						gameId: game.id,
+						writeUnits: game.monthlyWriteUnits,
+						readUnits: game.monthlyReadUnits,
+						status: BillStatus.PENDING,
+						time: new Date(),
+					});
+				}
 			}
 			await this._billModel.create(bills);
 			// reset count after create bill

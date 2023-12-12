@@ -40,6 +40,7 @@
     "firebase-admin": "~11.11.0",
     "joi": "~17.4.2",
     "js-yaml": "~4.1.0",
+    "moment": "~2.29.4",
     "mongoose": "~7.5.3",
     "nest-winston": "~1.9.4",
     "passport": "~0.6.0",

@@ -1,7 +1,7 @@
 import { FilterQuery, ProjectionType, QueryOptions } from 'mongoose';
 import { UpdateResult } from 'mongodb';
 
-import { Bill, BillDocument } from './Bill';
+import { Bill, BillDocument, BillStatus } from './Bill';
 
 
 export const enum Types {
@@ -14,6 +14,7 @@ export interface IGHubJobs {
 }
 
 export interface IBillService {
+	findByUser(status?: BillStatus): Promise<BillDocument[]>;
 	findOne(
 		filter: FilterQuery<BillDocument>,
 		projection?: ProjectionType<Bill>,

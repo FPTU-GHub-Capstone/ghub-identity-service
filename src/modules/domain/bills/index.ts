@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ExternalApiModule } from 'src/modules/externalApi';
+import { RequestContextModule } from 'src/modules/core/requestContext';
 
 import { DomainModels } from '../../../constants';
 
@@ -20,6 +21,7 @@ export * from './types';
 			{ name: DomainModels.BILL, schema: BillSchema },
 		]),
 		ExternalApiModule,
+		RequestContextModule,
 	],
 	providers: [
 		{

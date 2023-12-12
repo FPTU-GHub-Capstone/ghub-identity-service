@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Type, plainToInstance } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsNumber, IsString, Min, MinLength, ValidateNested, validateSync } from 'class-validator';
 
@@ -80,6 +81,24 @@ class DatabaseVariables {
 	public mongo: MongoVariables;
 }
 
+
+class VnPayVariables {
+	@IsNotEmpty()
+	@IsString()
+	public VNP_URL: string;
+
+	@IsNotEmpty()
+	@IsString()
+	public VNP_RETURN_URL: string;
+
+	@IsNotEmpty()
+	@IsString()
+	public VNP_HASHSECRET: string;
+
+	@IsNotEmpty()
+	@IsString()
+	public VNP_TMNCODE: string;
+}
 class FirebaseVariables {
 	@IsNotEmpty()
 	@IsString()
@@ -114,6 +133,11 @@ export class EnvironmentVariables {
 	@ValidateNested()
 	@Type(() => FirebaseVariables)
 	public firebase: FirebaseVariables;
+
+	@IsNotEmpty()
+	@ValidateNested()
+	@Type(() => VnPayVariables)
+	public vnpay: VnPayVariables;
 }
 
 export default function validateEnv(config: Record<string, unknown>) {
