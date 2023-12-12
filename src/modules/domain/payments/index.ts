@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { DomainModels } from '../../../constants';
 import { UserModule } from '../users';
+import { BillModule } from '../bills';
 
 import { PaymentSchema } from './Payment';
 import { Types as TPayment } from './types';
@@ -18,6 +19,7 @@ export * from './types';
 			{ name: DomainModels.PAYMENT, schema: PaymentSchema },
 		]),
 		UserModule,
+		BillModule,
 	],
 	providers: [
 		{

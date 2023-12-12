@@ -28,6 +28,10 @@ export class AppConfigurationService {
 		return this._configService.get('application.gms_url');
 	}
 
+	public get ghubFeUrl(): string {
+		return this._configService.get('application.ghub_fe_url');
+	}
+
 	public get jwtExpiresIn(): number {
 		return this._configService.get('application.jwt_expires_in');
 	}

@@ -1,6 +1,6 @@
 import { Bill } from '../bills';
 
-import { PaymentStatus } from './Payment';
+import { PaymentDocument, PaymentStatus } from './Payment';
 
 
 export const enum Types {
@@ -9,6 +9,8 @@ export const enum Types {
 
 export interface IPaymentService {
 	createPaymentUrl(uid: string, ipAddress: string, bills: Bill[]): Promise<string>;
+	findAll(): Promise<PaymentDocument[]>;
+	vnpIpn(inpParams: VnpIpnParams): Promise<VnpPaymentResponse>;
 }
 
 export type VnpTransactionParams = {

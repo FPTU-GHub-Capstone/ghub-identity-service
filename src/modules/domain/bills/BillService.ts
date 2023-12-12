@@ -7,6 +7,7 @@ import {
 	ProjectionType,
 	QueryOptions,
 	Types,
+	UpdateQuery,
 } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -32,7 +33,7 @@ export class BillService implements IBillService {
 
 	public async findByUser(status?: BillStatus): Promise<BillDocument[]> {
 		let bills: BillDocument[] = [];
-		const filter: FilterQuery<Bill> = {};
+		const filter: FilterQuery<BillDocument> = {};
 		status && Object.assign(filter, { status });
 		const currentScp = this._reqCnTx.getScope();
 		if (currentScp.includes('games:*:get')) {
@@ -46,7 +47,7 @@ export class BillService implements IBillService {
 
 	private async _findBillByGm(
 		gmScp: string[],
-		filter: FilterQuery<Bill>,
+		filter: FilterQuery<BillDocument>,
 	): Promise<BillDocument[]> {
 		const gameIds = gmScp
 			.filter((scp) => GET_GAME_PERMISSION_REGEX.test(scp))
@@ -60,16 +61,16 @@ export class BillService implements IBillService {
 	}
 
 	public findOne(
-		filter: FilterQuery<Bill>,
-		projection?: ProjectionType<Bill>,
-		options?: QueryOptions<Bill> | null,
+		filter: FilterQuery<BillDocument>,
+		projection?: ProjectionType<BillDocument>,
+		options?: QueryOptions<BillDocument>,
 	): Promise<BillDocument> {
 		return this._billModel.findOne(filter, projection, options);
 	}
 	public find(
-		filter: FilterQuery<Bill>,
-		projection?: ProjectionType<Bill>,
-		options?: QueryOptions<Bill> | null,
+		filter: FilterQuery<BillDocument>,
+		projection?: ProjectionType<BillDocument>,
+		options?: QueryOptions<Bill>,
 	): Promise<BillDocument[]> {
 		return this._billModel.find(filter, projection, options);
 	}
@@ -86,5 +87,13 @@ export class BillService implements IBillService {
 				new: true,
 			},
 		);
+	}
+
+	public async updateMany(
+		filter: FilterQuery<BillDocument>,
+		update?: UpdateQuery<BillDocument>,
+		options?: QueryOptions<BillDocument>
+	): Promise<void> {
+		await this._billModel.updateMany(filter, update, options);
 	}
 }

@@ -46,6 +46,10 @@ class ApplicationVariables {
 	public gms_url: string;
 
 	@IsNotEmpty()
+	@IsString()
+	public ghub_fe_url: string;
+
+	@IsNotEmpty()
 	@IsNumber()
 	public wu_price: number;
 
