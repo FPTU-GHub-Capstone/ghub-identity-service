@@ -36,6 +36,14 @@ export class AppConfigurationService {
 		return this._configService.get('application.jwt_secret');
 	}
 
+	public get writeUnitPrice(): number {
+		return parseFloat('application.wu_price');
+	}
+
+	public get readUnitPrice(): number {
+		return parseFloat('application.ru_price');
+	}
+
 	public get mdbUsername(): string {
 		return this._configService.get('database.mongo.username');
 	}

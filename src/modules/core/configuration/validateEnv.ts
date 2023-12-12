@@ -43,6 +43,14 @@ class ApplicationVariables {
 	@IsNotEmpty()
 	@IsString()
 	public gms_url: string;
+
+	@IsNotEmpty()
+	@IsNumber()
+	public wu_price: number;
+
+	@IsNotEmpty()
+	@IsNumber()
+	public ru_price: number;
 };
 
 class MongoVariables {

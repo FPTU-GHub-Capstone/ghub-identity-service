@@ -16,7 +16,8 @@ export enum TokenTypes {
 
 export const enum DomainModels {
 	USER = 'User',
-	CLIENT = 'Client'
+	CLIENT = 'Client',
+	BILL = 'Bill'
 }
 
 export const IS_PUBLIC_KEY = 'gis:isPublic';

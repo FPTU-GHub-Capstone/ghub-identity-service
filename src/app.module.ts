@@ -18,6 +18,8 @@ import { ClientController } from './controllers/clients/ClientController';
 import { GameController } from './controllers/games/GameController';
 import { UserController } from './controllers/users/UserController';
 import { ExternalApiModule } from './modules/externalApi';
+import { BillModule } from './modules/domain/bills';
+import { BillController } from './controllers/bills/BillController';
 
 
 const coreModules = [
@@ -31,6 +33,7 @@ const domainModules = [
 	AuthenticationModule,
 	UserModule,
 	ClientModule,
+	BillModule,
 ];
 
 @Module({
@@ -45,6 +48,7 @@ const domainModules = [
 		ClientController,
 		GameController,
 		UserController,
+		BillController,
 	],
 	providers: [
 		{

@@ -15,6 +15,7 @@ import {
 
 
 const REQUEST_TIMEOUT = 60000;
+const GET_GAME_SCOPE = 'games:*:get';
 
 @Injectable()
 export class GameService implements IGameService {
@@ -24,18 +25,22 @@ export class GameService implements IGameService {
 		@Inject(TAuth.AUTH_SVC) private readonly _authSvc: IAuthService,
 	) {}
 
+	public getGames(): Promise<GetGameResponse[]> {
+		return this._makeRequest(async (axiosInstance) => {
+			const response = await axiosInstance.get<AutoWrapper<GetGameResponse[]>>(
+				'/games',
+			);
+			return response.data.result;
+		}, [GET_GAME_SCOPE]);
+	}
+
 	public async getGame(gameId: string): Promise<GetGameResponse> {
-		const scope = [this._buildGetGameScope(gameId)];
 		return this._makeRequest(async (axiosInstance) => {
 			const response = await axiosInstance.get<AutoWrapper<GetGameResponse>>(
 				`/games/${gameId}`,
 			);
 			return response.data.result;
-		}, scope);
-	}
-
-	private _buildGetGameScope(gameId: string) {
-		return `games:${gameId}:get`;
+		}, [GET_GAME_SCOPE]);
 	}
 
 	private async _makeRequest<TResponse = any>(
