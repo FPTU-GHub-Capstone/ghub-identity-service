@@ -76,7 +76,7 @@ export class VnPayService implements IPaymentService {
 		switch (vnpResCode) {
 			case VnpResCode.Success:
 				await Promise.all([
-					this._updatePaymentStatus(inpParams),
+					this._updatePaymentStatus(inpParams, PaymentStatus.Success),
 					this._updateBillStatus(paymentId),
 				]);
 				return {

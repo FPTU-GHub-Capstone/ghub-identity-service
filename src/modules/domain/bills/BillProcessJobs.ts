@@ -56,7 +56,7 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 		}
 		catch (err) {
 			this._logger.error('Get games error', err);
-			throw new err;
+			// throw new err;
 		}
 	}
 
