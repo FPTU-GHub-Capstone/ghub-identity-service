@@ -150,7 +150,6 @@ export class AuthService implements IAuthService {
 			auth_time: now,
 			iat: now,
 			uid: usr.uid,
-			usr: usr.email,
 			scp: usr.scope.split(' '),
 		};
 		return this._jwtService.sign(payload);

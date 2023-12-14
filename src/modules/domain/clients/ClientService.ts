@@ -37,7 +37,7 @@ export class ClientService implements IClientService {
 		projection?: ProjectionType<Client>,
 		options?: QueryOptions<Client>,
 	): Promise<ClientDocument[]> {
-		return this._clientModel.find(filter, projection, options);
+		return this._clientModel.find(filter, projection, options).select<ClientDocument>(['-clientSecret', '-hashedClientSecret']);
 	}
 
 	public async create(
