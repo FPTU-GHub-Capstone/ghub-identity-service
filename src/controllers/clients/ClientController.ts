@@ -45,7 +45,7 @@ export class ClientController {
 	@Get(':id')
 	public async getClient(@Param('id') id: string, @GetUser() user: HttpUser) {
 		const client = await this._clientSvc.findOne({ clientId: id }, '-hashedClientSecret');
-		if (!user.zscp.includes(`games:${client.gameId}:update`)) {
+		if (!user.scp.includes(`games:${client.gameId}:update`)) {
 			throw new ForbiddenException();
 		}
 		return client;
