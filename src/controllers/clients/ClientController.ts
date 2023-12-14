@@ -52,7 +52,10 @@ export class ClientController {
 	}
 
 	@Post()
-	public async create(@Body() createClientDto: dto.CreateClientDto) {
+	public async create(@Body() createClientDto: dto.CreateClientDto, @GetUser() user: HttpUser) {
+		if (!user.scp.includes(`games:${createClientDto.gameId}:update`)) {
+			throw new ForbiddenException();
+		}
 		// validate user permission
 		await this._validateGame(createClientDto.gameId);
 		const { scope: reqScp, ...createClientParam } = createClientDto;
