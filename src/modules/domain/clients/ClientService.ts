@@ -76,8 +76,6 @@ export class ClientService implements IClientService {
 		clientId: string,
 		updateClientParam: UpdateClientParam,
 	): Promise<UpdateResult> {
-		const client = await this.findOne({ clientId });
-		if (!client) throw new NotFoundException('Client not exist');
 		let hashedClientSecret = undefined;
 		if (updateClientParam.clientSecret) {
 			hashedClientSecret = await bcrypt.hash(updateClientParam.clientSecret, 8);

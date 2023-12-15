@@ -45,18 +45,13 @@ export class ClientController {
 	@Get(':id')
 	public async getClient(@Param('id') id: string, @GetUser() user: HttpUser) {
 		const client = await this._clientSvc.findOne({ clientId: id }, '-hashedClientSecret');
-		if (!user.scp.includes(`games:${client.gameId}:update`)) {
-			throw new ForbiddenException();
-		}
+		this._validateGameUpdatePermission(client.gameId, user);
 		return client;
 	}
 
 	@Post()
 	public async create(@Body() createClientDto: dto.CreateClientDto, @GetUser() user: HttpUser) {
-		if (!user.scp.includes(`games:${createClientDto.gameId}:update`)) {
-			throw new ForbiddenException();
-		}
-		// validate user permission
+		this._validateGameUpdatePermission(createClientDto.gameId, user);
 		await this._validateGame(createClientDto.gameId);
 		const { scope: reqScp, ...createClientParam } = createClientDto;
 		const scope = reqScp.join(' ');
@@ -81,7 +76,11 @@ export class ClientController {
 	public async update(
 	@Param('id') id: string,
 		@Body() updateClientDto: dto.UpdateClientDto,
+		@GetUser() user: HttpUser
 	) {
+		const client = await this._clientSvc.findOne({ clientId: id });
+		if (!client) throw new NotFoundException('Client not exist');
+		this._validateGameUpdatePermission(client.gameId, user);
 		const { scope: reqScp, ...updateClientParam } = updateClientDto;
 		const scope = reqScp?.join(' ');
 		return await this._clientSvc.update(id, {
@@ -94,5 +93,11 @@ export class ClientController {
 	@HttpCode(HttpStatus.NO_CONTENT)
 	public async delete(@GetUser() user: HttpUser, @Param('id') id: string) {
 		await this._clientSvc.delete(id);
+	}
+
+	private _validateGameUpdatePermission(gameId: string, user: HttpUser) {
+		if (!user.scp.includes(`games:${gameId}:update`)) {
+			throw new ForbiddenException();
+		}
 	}
 }
