@@ -22,6 +22,7 @@ export interface IUserService {
 	create(createUserParam: CreateUserParam): Promise<UserDocument>;
 	count(filter?: FilterQuery<User>): Promise<number>;
 	addScope(uid: string, scope: string[]): Promise<UpdateResult>;
+	removeScope(uid: string, scope: string[]): Promise<UpdateResult>;
 	update(uid: string, updateUserParam: UpdateUserParam): Promise<UpdateResult>;
 }
 

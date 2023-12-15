@@ -42,10 +42,18 @@ export class UserController {
 	}
 
 	@Put(':uid/add-scope')
-	public async update(
+	public async addScope(
 	@Param('uid') uid: string,
 		@Body() { scope }: dto.AddScopeDto,
 	) {
 		return await this._usrSvc.addScope(uid, scope);
+	}
+
+	@Put(':uid/remove-scope')
+	public async removeScope(
+	@Param('uid') uid: string,
+		@Body() { scope }: dto.RemoveScopeDto,
+	) {
+		return await this._usrSvc.removeScope(uid, scope);
 	}
 }

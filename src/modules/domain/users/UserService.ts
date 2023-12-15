@@ -17,6 +17,21 @@ export class UserService implements IUserService {
 		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
 	) {}
 
+	public async removeScope(uid: string, scope: string[]): Promise<UpdateResult> {
+		const usr = await this.findOne({ uid });
+		if (!usr) throw new NotFoundException('User not exist');
+		const usrScope = usr.scope.split(' ');
+		for (const scp of scope) {
+			const index = usrScope.indexOf(scp);
+			usrScope.splice(index, 1);
+		}
+		return this._userModel.updateOne({ uid }, {
+			scope: usrScope.join(' '),
+		}, {
+			new: true,
+		});
+	}
+
 	public async addScope(uid: string, scope: string[]): Promise<UpdateResult> {
 		const usr = await this.findOne({ uid });
 		if (!usr) throw new NotFoundException('User not exist');

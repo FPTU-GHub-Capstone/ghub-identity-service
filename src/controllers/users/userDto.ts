@@ -8,3 +8,11 @@ export class AddScopeDto {
 	@ApiProperty()
 	public scope: string[];
 }
+
+
+export class RemoveScopeDto {
+	@IsNotEmpty()
+	@ArrayNotEmpty()
+	@ApiProperty()
+	public scope: string[];
+}
