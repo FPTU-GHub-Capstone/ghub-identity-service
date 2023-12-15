@@ -70,7 +70,9 @@ async function getPort(app: INestApplication) {
 
 async function bootstrap() {
 	handleUnexpectedError;
-	const app = await NestFactory.create(AppModule, { cors: true });
+	const app = await NestFactory.create(AppModule, { cors: {
+		origin: '*',
+	} });
 	app.use(setHstsHeader);
 	app.use(setCSPHeader);
 	enableSwagger(app);
