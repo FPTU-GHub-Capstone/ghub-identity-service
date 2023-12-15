@@ -10,7 +10,7 @@ services:
     environment:
       - NODE_ENV=local
 
-# networks:
-#   default:
-#     external:
-#       name: ghub-permission-lambda_default
+networks:
+  default:
+    external:
+      name: game-management-service_default
