@@ -20,10 +20,9 @@ export class UserService implements IUserService {
 	public async removeScope(uid: string, scope: string[]): Promise<UpdateResult> {
 		const usr = await this.findOne({ uid });
 		if (!usr) throw new NotFoundException('User not exist');
-		const usrScope = usr.scope.split(' ');
+		let usrScope = usr.scope.split(' ');
 		for (const scp of scope) {
-			const index = usrScope.indexOf(scp);
-			usrScope.splice(index, 1);
+			usrScope = usrScope.filter((usrScp) => usrScp !== scp);
 		}
 		return this._userModel.updateOne({ uid }, {
 			scope: usrScope.join(' '),
