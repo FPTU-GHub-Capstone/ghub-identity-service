@@ -56,6 +56,10 @@ class ApplicationVariables {
 	@IsNotEmpty()
 	@IsNumber()
 	public ru_price: number;
+
+	@IsNotEmpty()
+	@IsNumber()
+	public usd_to_vnd: number;
 };
 
 class MongoVariables {

@@ -30,8 +30,6 @@ import {
 import { Payment, PaymentDocument, PaymentStatus } from './Payment';
 
 
-const USD_TO_VND = 24275;
-
 @Injectable()
 export class VnPayService implements IPaymentService {
 	constructor(
@@ -166,13 +164,11 @@ export class VnPayService implements IPaymentService {
 		bills: Bill[],
 		uid: string,
 	): Promise<PaymentDocument> {
+		const cfgSvc = this._cfgSvc;
 		const user = await this._usrSvc.findOne({ uid });
 		const amount = bills.reduce((acc, bill) => {
 			if (bill.status !== BillStatus.PAID) {
-				acc +=
-          (this._cfgSvc.writeUnitPrice * bill.writeUnits +
-            this._cfgSvc.readUnitPrice * bill.readUnits) *
-          USD_TO_VND;
+				acc += (cfgSvc.writeUnitPrice * bill.writeUnits + cfgSvc.readUnitPrice * bill.readUnits) * cfgSvc.usdToVnd;
 			}
 			return acc;
 		}, 0);

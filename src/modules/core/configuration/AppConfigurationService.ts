@@ -48,6 +48,10 @@ export class AppConfigurationService {
 		return parseFloat(this._configService.get('application.ru_price'));
 	}
 
+	public get usdToVnd(): number {
+		return parseFloat(this._configService.get('application.usd_to_vnd'));
+	}
+
 	public get vnpayUrl(): string {
 		return this._configService.get('vnpay.VNP_URL');
 	}

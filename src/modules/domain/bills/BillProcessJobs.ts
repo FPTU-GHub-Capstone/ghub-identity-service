@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 /* eslint-disable max-depth */
 /* eslint-disable max-lines-per-function */
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
@@ -8,10 +9,16 @@ import { Model } from 'mongoose';
 import { DomainModels } from '../../../constants';
 import { IGameService, Types as TExtApi } from '../../externalApi';
 import { IGHubLogger, Types as TLog } from '../../core/logging';
+import {
+	AppConfigurationService,
+	Types as TConfig,
+} from '../../core/configuration';
 
 import { IGHubJobs } from './types';
 import { Bill, BillDocument, BillStatus } from './Bill';
 
+
+const VNPAY_MINIMUM_AMOUNT_TRANSACTION = 10000;
 
 @Injectable()
 export class BillProcessJobs implements OnModuleInit, IGHubJobs {
@@ -22,6 +29,7 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 		@InjectModel(DomainModels.BILL) private readonly _billModel: Model<Bill>,
 		@Inject(TExtApi.GAME_SVC) private readonly _gameSvc: IGameService,
 		@Inject(TLog.LOGGER_SVC) private readonly _logger: IGHubLogger,
+		@Inject(TConfig.CFG_SVC) private readonly _cfgSvc: AppConfigurationService
 	) {}
 
 	public onModuleInit() {
@@ -74,7 +82,11 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 			const bills: Bill[] = [];
 			const games = await this._gameSvc.getGames();
 			for (const game of games) {
-				if (game.monthlyWriteUnits > 0) {
+				const amount =
+          (game.monthlyWriteUnits * this._cfgSvc.writeUnitPrice +
+            game.monthlyReadUnits * this._cfgSvc.readUnitPrice) *
+          this._cfgSvc.usdToVnd;
+				if (amount > VNPAY_MINIMUM_AMOUNT_TRANSACTION) {
 					bills.push({
 						gameId: game.id,
 						writeUnits: game.monthlyWriteUnits,
@@ -85,7 +97,7 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 				}
 			}
 			await this._billModel.create(bills);
-			// reset count after create bill
+			// reset count of games that create bill
 		}
 		catch (err) {
 			this._logger.error('Get games error', err);
