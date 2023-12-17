@@ -8,11 +8,11 @@ import {
 	UseGuards,
 	ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+import { Public } from '../../common/decorators';
 import { JwtAuthGuard } from '../../modules/domain/auth';
 import {
-	BillStatus,
 	IBillService,
 	IGHubJobs,
 	Types as TBill,
@@ -50,11 +50,13 @@ export class BillController {
 		return { bills };
 	}
 
+	@Public()
 	@Post('create-bills')
 	public fireBillCreation() {
 		this._bgJobs.fireBillCreationJob();
 	}
 
+	@Public()
 	@Post('handle-unpaid-bills')
 	public fireBillOverdueJob() {
 		this._bgJobs.fireBillOverdueJob();

@@ -168,7 +168,7 @@ export class VnPayService implements IPaymentService {
 		const user = await this._usrSvc.findOne({ uid });
 		const amount = bills.reduce((acc, bill) => {
 			if (bill.status !== BillStatus.PAID) {
-				acc += (cfgSvc.writeUnitPrice * bill.writeUnits + cfgSvc.readUnitPrice * bill.readUnits) * cfgSvc.usdToVnd;
+				acc += (cfgSvc.writeUnitPrice * bill.writeUnits /* + cfgSvc.readUnitPrice * bill.readUnits */) * cfgSvc.usdToVnd;
 			}
 			return acc;
 		}, 0);

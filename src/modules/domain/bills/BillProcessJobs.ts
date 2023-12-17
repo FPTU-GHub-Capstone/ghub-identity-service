@@ -81,11 +81,10 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 		try {
 			const bills: Bill[] = [];
 			const games = await this._gameSvc.getGames();
+			const cfgSvc = this._cfgSvc;
 			for (const game of games) {
 				const amount =
-          (game.monthlyWriteUnits * this._cfgSvc.writeUnitPrice +
-            game.monthlyReadUnits * this._cfgSvc.readUnitPrice) *
-          this._cfgSvc.usdToVnd;
+          (game.monthlyWriteUnits * cfgSvc.writeUnitPrice/*  + game.monthlyReadUnits * cfgSvc.readUnitPrice */) * cfgSvc.usdToVnd;
 				if (amount > VNPAY_MINIMUM_AMOUNT_TRANSACTION) {
 					bills.push({
 						gameId: game.id,
