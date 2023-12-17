@@ -6,6 +6,7 @@ import {
 	Post,
 	Query,
 	UseGuards,
+	ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
@@ -21,6 +22,8 @@ import {
 	Types as TCntx,
 } from '../../modules/core/requestContext';
 
+import * as dto from './billDto';
+
 
 @ApiBearerAuth('Bearer')
 @ApiTags('bill')
@@ -33,19 +36,17 @@ export class BillController {
 		@Inject(TCntx.REQUEST_CONTEXT) private readonly _reqCnTx: IRequestContext,
 	) {}
 
-	@ApiQuery({
-		name: 'bills',
-		isArray: true,
-		required: false,
-	})
-	@ApiQuery({
-		name: 'status',
-		enum: BillStatus,
-		required: false,
-	})
 	@Get()
-	public async getAll(@Query('bills') billIds?: string[], @Query('status') status?: BillStatus) {
-		const bills = await this._billSvc.findByUser(billIds, status);
+	public async getAll(@Query(new ValidationPipe({ transform: true })) billsQuery?: dto.BillsQuery) {
+		const { bills: billIds, status } = billsQuery;
+		let filteredBillIds: string[] = [];
+		if (typeof billIds === 'string') {
+			filteredBillIds = [billIds];
+		}
+		else {
+			filteredBillIds = billIds;
+		}
+		const bills = await this._billSvc.findByUser(filteredBillIds, status);
 		return { bills };
 	}
 

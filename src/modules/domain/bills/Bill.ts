@@ -24,7 +24,7 @@ export class Bill {
 	@Prop({ required: true })
 	public time: Date;
 
-	@Prop({ required: true })
+	@Prop({ required: true, enum: BillStatus })
 	public status: BillStatus;
 
 	@Prop()

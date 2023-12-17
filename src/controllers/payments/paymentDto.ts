@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsOptional } from 'class-validator';
+import { ArrayNotEmpty, IsMongoId, IsOptional } from 'class-validator';
 
 
 export class VnpIpnQuery {
@@ -64,6 +64,7 @@ export class VnpIpnQuery {
 export class CreateUrlDto {
 	@IsOptional()
 	@ArrayNotEmpty()
+	@IsMongoId({ each: true })
 	@ApiProperty()
 	public bills?: string[];
 }
