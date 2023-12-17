@@ -1,4 +1,5 @@
-import { Controller, Get, HttpStatus, Inject, Ip, Post, Query, Res, UseGuards } from '@nestjs/common';
+/* eslint-disable max-lines-per-function */
+import { Body, Controller, Get, HttpStatus, Inject, Ip, Post, Query, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
@@ -31,7 +32,8 @@ export class PaymentController {
 	// @Redirect()
 	@Post('create-url')
 	public async createPaymentUrl(
-	@Ip() ip: string,
+	@Body() { bills: billIds }: dto.CreateUrlDto,
+		@Ip() ip: string,
 		@GetUser() user: HttpUser,
 	) {
 		let ipAddress: string;
@@ -41,7 +43,7 @@ export class PaymentController {
 		else {
 			ipAddress = ip.replace(/^.*:/, '');
 		}
-		const bills = await this._billSvc.findByUser(BillStatus.PENDING);
+		const bills = await this._billSvc.findByUser(billIds, BillStatus.PENDING);
 		const paymentUrl = await this._vnPaySvc.createPaymentUrl(user.uid, ipAddress, bills);
 		return {
 			url: paymentUrl,

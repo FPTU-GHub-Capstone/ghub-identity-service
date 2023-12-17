@@ -125,9 +125,7 @@ export class VnPayService implements IPaymentService {
 				},
 			},
 			{ status: BillStatus.PAID },
-			{
-				new: true,
-			},
+			{ new: true },
 		);
 	}
 

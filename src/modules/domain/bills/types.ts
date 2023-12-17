@@ -11,10 +11,11 @@ export const enum Types {
 
 export interface IGHubJobs {
 	fireBillCreationJob(): void;
+	fireBillOverdueJob(): void;
 }
 
 export interface IBillService {
-	findByUser(status?: BillStatus): Promise<BillDocument[]>;
+	findByUser(billIds?: string[], status?: BillStatus): Promise<BillDocument[]>;
 	findOne(
 		filter: FilterQuery<BillDocument>,
 		projection?: ProjectionType<BillDocument>,

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateResult } from 'mongodb';
 import {
@@ -31,13 +32,14 @@ export class BillService implements IBillService {
 		@Inject(TCntx.REQUEST_CONTEXT) private readonly _reqCnTx: IRequestContext,
 	) {}
 
-	public async findByUser(status?: BillStatus): Promise<BillDocument[]> {
+	public async findByUser(billIds?: string[], status?: BillStatus): Promise<BillDocument[]> {
 		let bills: BillDocument[] = [];
 		const sort: any = {
 			status: '-1', // DESC of mongo
 		};
 		const filter: FilterQuery<BillDocument> = {};
-		status && Object.assign(filter, { status });
+		this._handleQueryByBillIds(filter, billIds);
+		this._handleQueryByStatus(filter, status);
 		const currentScp = this._reqCnTx.getScope();
 		if (currentScp.includes('games:*:get')) {
 			bills = await this.find(filter, undefined, { sort });
@@ -46,6 +48,18 @@ export class BillService implements IBillService {
 			bills = await this._findBillByGm(currentScp, filter, sort);
 		}
 		return bills;
+	}
+
+	private _handleQueryByStatus(filter: FilterQuery<BillDocument>, status?: BillStatus) {
+		status && Object.assign(filter, { status });
+	}
+
+	private _handleQueryByBillIds(filter: FilterQuery<BillDocument>, billIds?: string[]) {
+		billIds && billIds.length && Object.assign(filter, {
+			_id: {
+				$in: billIds,
+			},
+		},);
 	}
 
 	private async _findBillByGm(

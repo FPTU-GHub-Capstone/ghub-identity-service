@@ -34,18 +34,28 @@ export class BillController {
 	) {}
 
 	@ApiQuery({
+		name: 'bills',
+		isArray: true,
+		required: false,
+	})
+	@ApiQuery({
 		name: 'status',
 		enum: BillStatus,
 		required: false,
 	})
 	@Get()
-	public async getAll(@Query('status') status?: BillStatus) {
-		const bills = await this._billSvc.findByUser(status);
+	public async getAll(@Query('bills') billIds?: string[], @Query('status') status?: BillStatus) {
+		const bills = await this._billSvc.findByUser(billIds, status);
 		return { bills };
 	}
 
 	@Post('create-bills')
 	public fireBillCreation() {
 		this._bgJobs.fireBillCreationJob();
+	}
+
+	@Post('handle-unpaid-bills')
+	public fireBillOverdueJob() {
+		this._bgJobs.fireBillOverdueJob();
 	}
 }

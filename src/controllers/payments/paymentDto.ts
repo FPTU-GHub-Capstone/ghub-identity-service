@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ArrayNotEmpty, IsOptional } from 'class-validator';
 
 
 export class VnpIpnQuery {
@@ -57,4 +58,12 @@ export class VnpIpnQuery {
 
 	@ApiProperty()
 	public vnp_SecureHash: string;
+}
+
+
+export class CreateUrlDto {
+	@IsOptional()
+	@ArrayNotEmpty()
+	@ApiProperty()
+	public bills?: string[];
 }

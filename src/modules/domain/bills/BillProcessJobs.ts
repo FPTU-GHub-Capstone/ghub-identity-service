@@ -10,12 +10,13 @@ import { IGameService, Types as TExtApi } from '../../externalApi';
 import { IGHubLogger, Types as TLog } from '../../core/logging';
 
 import { IGHubJobs } from './types';
-import { Bill, BillStatus } from './Bill';
+import { Bill, BillDocument, BillStatus } from './Bill';
 
 
 @Injectable()
 export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 	private _billCreationJob: CronJob;
+	private _billOverdueJob: CronJob;
 
 	constructor(
 		@InjectModel(DomainModels.BILL) private readonly _billModel: Model<Bill>,
@@ -25,6 +26,38 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 
 	public onModuleInit() {
 		this._billCreationJob = this._buildBillCreationJob();
+		this._billOverdueJob = this._buildBillOverdueJob();
+	}
+
+	private _buildBillOverdueJob() {
+		return CronJob.from({
+			cronTime: '0 0 5 * *',
+			onTick: this._billOverdueOnTick.bind(this),
+			start: true,
+			timeZone: 'Asia/Ho_Chi_Minh',
+		});
+	}
+
+	private async _billOverdueOnTick() {
+		try {
+			const bills: BillDocument[] = (await this._billModel.find()) || [];
+			const unpaidBills = bills.filter((bill) => bill.status === BillStatus.PENDING);
+			const unpaidBillIds = unpaidBills.map<string>((bill) => bill._id.toString());
+			await this._billModel.updateMany(
+				{
+					_id: {
+						$in: unpaidBillIds,
+					},
+				},
+				{ status: BillStatus.OVERDUE },
+				{ new: true },
+			);
+			// inactive game
+		}
+		catch (err) {
+			this._logger.error('_billOverdueOnTick error', err);
+			// throw new err;
+		}
 	}
 
 	private _buildBillCreationJob() {
@@ -58,6 +91,10 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 			this._logger.error('Get games error', err);
 			// throw new err;
 		}
+	}
+
+	public fireBillOverdueJob(): void {
+		this._billOverdueJob.fireOnTick();
 	}
 
 	public fireBillCreationJob(): void {
