@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
-import { BillStatus } from 'src/modules/domain/bills';
+
+import { BillStatus } from '../../modules/domain/bills';
 
 
 export class BillsQuery {

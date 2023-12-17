@@ -43,7 +43,7 @@ export class PaymentController {
 		else {
 			ipAddress = ip.replace(/^.*:/, '');
 		}
-		const bills = await this._billSvc.findByUser(billIds, BillStatus.PENDING);
+		const bills = await this._billSvc.findByUser(billIds);
 		const paymentUrl = await this._vnPaySvc.createPaymentUrl(user.uid, ipAddress, bills);
 		return {
 			url: paymentUrl,
