@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable max-params */
 /* eslint-disable max-lines */
 import crypto from 'crypto';
@@ -161,12 +162,20 @@ export class VnPayService implements IPaymentService {
 		return sortObject(transactionParams);
 	}
 
-	private async _storePaymentRequest(bills: Bill[], uid: string): Promise<PaymentDocument> {
+	private async _storePaymentRequest(
+		bills: Bill[],
+		uid: string,
+	): Promise<PaymentDocument> {
 		const user = await this._usrSvc.findOne({ uid });
-		const amount = bills.reduce(
-			(acc, bill) => acc + this._cfgSvc.writeUnitPrice * bill.writeUnits * USD_TO_VND,
-			0,
-		);
+		const amount = bills.reduce((acc, bill) => {
+			if (bill.status !== BillStatus.PAID) {
+				acc +=
+          (this._cfgSvc.writeUnitPrice * bill.writeUnits +
+            this._cfgSvc.readUnitPrice * bill.readUnits) *
+          USD_TO_VND;
+			}
+			return acc;
+		}, 0);
 		const payDate = moment(new Date()).format('YYYYMMDDHHmmss');
 		const paymentMDb = await this._paymentModel.create({
 			amount,
