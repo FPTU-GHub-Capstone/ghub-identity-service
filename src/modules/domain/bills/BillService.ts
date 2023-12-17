@@ -33,14 +33,17 @@ export class BillService implements IBillService {
 
 	public async findByUser(status?: BillStatus): Promise<BillDocument[]> {
 		let bills: BillDocument[] = [];
+		const sort: any = {
+			status: '-1', // DESC of mongo
+		};
 		const filter: FilterQuery<BillDocument> = {};
 		status && Object.assign(filter, { status });
 		const currentScp = this._reqCnTx.getScope();
 		if (currentScp.includes('games:*:get')) {
-			bills = await this.find(filter);
+			bills = await this.find(filter, undefined, { sort });
 		}
 		else {
-			bills = await this._findBillByGm(currentScp, filter);
+			bills = await this._findBillByGm(currentScp, filter, sort);
 		}
 		return bills;
 	}
@@ -48,6 +51,7 @@ export class BillService implements IBillService {
 	private async _findBillByGm(
 		gmScp: string[],
 		filter: FilterQuery<BillDocument>,
+		sort: any
 	): Promise<BillDocument[]> {
 		const gameIds = gmScp
 			.filter((scp) => GET_GAME_PERMISSION_REGEX.test(scp))
@@ -57,7 +61,7 @@ export class BillService implements IBillService {
 				$in: Array.from(new Set(gameIds)),
 			},
 		});
-		return this.find(filter);
+		return this.find(filter, undefined, { sort });
 	}
 
 	public findOne(

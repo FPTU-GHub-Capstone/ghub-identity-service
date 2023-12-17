@@ -3,6 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 
 export enum BillStatus {
+	OVERDUE = 'overdue',
 	PENDING = 'pending',
 	PAID = 'paid'
 }

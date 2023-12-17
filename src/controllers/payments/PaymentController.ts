@@ -54,10 +54,10 @@ export class PaymentController {
 	public async vnpIpn(@Query() query: dto.VnpIpnQuery, @Res() response: Response) {
 		try {
 			await this._vnPaySvc.vnpIpn(query);
-			response.redirect(`${this._cfgSvc.ghubFeUrl}/payment?isSuccess=true`);
+			response.redirect(`${this._cfgSvc.ghubFeUrl}/successPayment`);
 		}
 		catch {
-			response.redirect(`${this._cfgSvc.ghubFeUrl}/payment?isSuccess=false`);
+			response.redirect(`${this._cfgSvc.ghubFeUrl}/failPayment`);
 		}
 		return;
 	}
