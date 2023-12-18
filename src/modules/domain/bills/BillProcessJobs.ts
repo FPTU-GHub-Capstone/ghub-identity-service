@@ -97,6 +97,10 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 			}
 			await this._billModel.create(bills);
 			// reset count of games that create bill
+			const gameIds = bills.map((bill) => bill.gameId);
+			if (gameIds.length) {
+				await this._gameSvc.resetRecords(gameIds);
+			}
 		}
 		catch (err) {
 			this._logger.error('Get games error', err);

@@ -9,6 +9,7 @@ export const enum Types {
 export interface IGameService {
 	getGames(): Promise<GetGameResponse[]>;
 	getGame(gameId: string): Promise<GetGameResponse>;
+	resetRecords(gameId: string[]): Promise<void>;
 }
 
 export type RequestExecutor = (axiosInstance: AxiosInstance) => Promise<any>;
