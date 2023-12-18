@@ -1,5 +1,6 @@
 import { HttpUser } from '../../../types';
 import { GrantTypes, TokenTypes } from '../../../constants';
+import { User } from '../users';
 
 
 export const enum Types {
@@ -23,7 +24,7 @@ export type IAuthService = {
 	exchangeToken(user: HttpUser): Promise<AccessTokenResponse>,
 	issueUserToken(authenticatedUser: AuthenticatedUser): Promise<AccessTokenResponse>,
 	login(loginParam: LoginParam): Promise<AccessTokenResponse>,
-	register(registerParam: RegisterParam): Promise<void>,
+	register(registerParam: RegisterParam): Promise<User>,
 	issueClientToken(user: HttpUser, issueClientTokenParam: IssueClientTokenParam): Promise<AccessTokenResponse>,
 	issueServiceToken(scp: string[]): string,
 }

@@ -4,7 +4,7 @@ import { BadRequestException, Inject, Injectable, UnauthorizedException } from '
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 
-import { IUserService, Types as TUser, UserDocument } from '../users';
+import { IUserService, Types as TUser, User, UserDocument } from '../users';
 import { AppConfigurationService, Types as TCfg } from '../../core/configuration';
 import { GrantTypes, TokenTypes } from '../../../constants';
 import { randomHash } from '../../../shared/miscUtils';
@@ -79,18 +79,19 @@ export class AuthService implements IAuthService {
 		}
 	}
 
-	public async register(registerParams: RegisterParam): Promise<void> {
+	public async register(registerParams: RegisterParam): Promise<User> {
 		const usr = await this._usrSvc.findOne({ username: registerParams.username });
 		if (usr) {
 			throw new BadRequestException('User exist');
 		}
 		const uid = await this._generateUid();
-		await this._usrSvc.create({
+		const newUser = await this._usrSvc.create({
 			username: registerParams.username,
 			password: await bcrypt.hash(registerParams.password, 8),
 			uid,
 			scope: this._cfgSvc.gmsDefaultScope,
 		});
+		return newUser;
 	}
 
 	public async login(loginParams: LoginParam): Promise<AccessTokenResponse> {
