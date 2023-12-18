@@ -7,6 +7,7 @@ import {
 	Put,
 	Query,
 	UseGuards,
+	ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FilterQuery } from 'mongoose';
@@ -22,21 +23,16 @@ import * as dto from './userDto';
 @UseGuards(JwtAuthGuard)
 @Controller('/v1/idp/users')
 export class UserController {
-	constructor(
-		@Inject(TUser.USR_SVC) private readonly _usrSvc: IUserService,
-	) {}
+	constructor(@Inject(TUser.USR_SVC) private readonly _usrSvc: IUserService) {}
 
-	@ApiQuery({
-		name: 'email',
-		type: String,
-		required: false,
-	})
 	@Get()
-	public async getAll(@Query('email') email?: string) {
+	public async getAll(
+	@Query(new ValidationPipe({ transform: true })) usersQuery?: dto.UsersQuery,
+	) {
+		const { email, username } = usersQuery;
 		const filter: FilterQuery<User> = {};
-		email && Object.assign(filter, { email: {
-			$regex: email,
-		} });
+		email && Object.assign(filter, { email: { $regex: email } });
+		username && Object.assign(filter, { username: { $regex: username } });
 		const users = await this._usrSvc.find(filter);
 		return { users };
 	}

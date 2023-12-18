@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsNotEmpty } from 'class-validator';
+import { ArrayNotEmpty, IsNotEmpty, IsOptional } from 'class-validator';
 
 
 export class AddScopeDto {
@@ -15,4 +15,19 @@ export class RemoveScopeDto {
 	@ArrayNotEmpty()
 	@ApiProperty()
 	public scope: string[];
+}
+
+
+export class UsersQuery {
+	@IsOptional()
+	@ApiProperty({
+		required: false,
+	})
+	public email?: string;
+
+	@IsOptional()
+	@ApiProperty({
+		required: false,
+	})
+	public username?: string;
 }
