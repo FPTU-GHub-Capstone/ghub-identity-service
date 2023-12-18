@@ -67,7 +67,7 @@ export class UserController {
 				throw new ForbiddenException('Only admin could add admin scope');
 			}
 			this._validateGameScope(scope);
-			this._validateUserPermission(user.scp, scope);
+			// this._validateUserPermission(user.scp, scope);
 		}
 		return await this._usrSvc.addScope(uid, scope);
 	}
@@ -97,7 +97,7 @@ export class UserController {
 	) {
 		if (!user.scp.includes(ADMIN_SCOPE)) {
 			this._validateGameScope(scope);
-			this._validateUserPermission(user.scp, scope);
+			// this._validateUserPermission(user.scp, scope);
 		}
 		return await this._usrSvc.removeScope(uid, scope);
 	}
