@@ -15,8 +15,9 @@ import {
 } from '../../core/configuration';
 import { DomainModels } from '../../../constants';
 import { sortObject } from '../../../shared/miscUtils';
-import { Bill, BillStatus, IBillService, Types as TBill } from '../bills';
+import { Bill, BillDocument, BillStatus, IBillService, Types as TBill } from '../bills';
 import { IUserService, Types as TUsr } from '../users';
+import { IGameService, Types as TExtApi } from '../../externalApi';
 
 import {
 	CreateTransactionParams,
@@ -37,6 +38,7 @@ export class VnPayService implements IPaymentService {
 		@Inject(TBill.BILL_SVC) private readonly _billSvc: IBillService,
 		@Inject(TCfg.CFG_SVC) private readonly _cfgSvc: AppConfigurationService,
 		@Inject(TUsr.USR_SVC) private readonly _usrSvc: IUserService,
+		@Inject(TExtApi.GAME_SVC) private readonly _gameSvc: IGameService,
 	) {}
 
 	public findAll(status?: PaymentStatus): Promise<PaymentDocument[]> {
@@ -76,10 +78,12 @@ export class VnPayService implements IPaymentService {
 		const { vnp_TxnRef: paymentId } = inpParams;
 		switch (vnpResCode) {
 			case VnpResCode.Success:
+				const payment = await this._paymentModel.findById(paymentId); // don't populate so bills is array of billId
 				await Promise.all([
 					this._updatePaymentStatus(inpParams, PaymentStatus.Success),
-					this._updateBillStatus(paymentId),
+					this._updateBillStatus(payment),
 				]);
+				await this._activeOverdueBillGames((payment.bills as unknown) as string[]);
 				return {
 					vnpResCode: VnpResCode.Success,
 					message: PaymentStatus.Success,
@@ -117,8 +121,7 @@ export class VnPayService implements IPaymentService {
 		);
 	}
 
-	private async _updateBillStatus(paymentId: string): Promise<void> {
-		const payment = await this._paymentModel.findById(paymentId);
+	private async _updateBillStatus(payment: PaymentDocument): Promise<void> {
 		await this._billSvc.updateMany(
 			{
 				_id: {
@@ -129,6 +132,23 @@ export class VnPayService implements IPaymentService {
 			{ new: true },
 		);
 	}
+
+	private async _activeOverdueBillGames(billIds: string[]): Promise<void> {
+		const activeGameIds: string[] = [];
+		const uniqueBillIds = Array.from(new Set(billIds));
+		for (const billId of uniqueBillIds) {
+			const bill = await this._billSvc.findOne({ _id: billId });
+			const gameId = bill.gameId;
+			const gameBills = await this._billSvc.find({ gameId: gameId, status: BillStatus.OVERDUE });
+			if (gameBills.length === 0) {
+				activeGameIds.push(gameId);
+			}
+		}
+		if (activeGameIds.length > 0) {
+			await this._gameSvc.updateStatus(activeGameIds, true);
+		}
+	}
+
 
 	private _validateCheckSum(inpParams: VnpIpnParams): boolean {
 		let isValid = true;

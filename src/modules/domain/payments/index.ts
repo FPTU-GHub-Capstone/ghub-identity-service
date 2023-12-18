@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ExternalApiModule } from 'src/modules/externalApi';
 
 import { DomainModels } from '../../../constants';
 import { UserModule } from '../users';
@@ -20,6 +21,7 @@ export * from './types';
 		]),
 		UserModule,
 		BillModule,
+		ExternalApiModule,
 	],
 	providers: [
 		{
