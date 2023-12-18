@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	ForbiddenException,
@@ -19,6 +20,9 @@ import { IUserService, Types as TUser, User } from '../../modules/domain/users';
 import { GetUser } from '../../common/decorators';
 
 import * as dto from './userDto';
+
+
+const ADMIN_SCOPE = 'games:*:get';
 
 
 @ApiBearerAuth('Bearer')
@@ -56,15 +60,45 @@ export class UserController {
 	public async addScope(
 	@Param('uid') uid: string,
 		@Body() { scope }: dto.AddScopeDto,
+		@GetUser() user: HttpUser
 	) {
+		if (!user.scp.includes(ADMIN_SCOPE)) {
+			if (scope.includes(ADMIN_SCOPE)) {
+				throw new ForbiddenException('Only admin could add admin scope');
+			}
+			this._validateGameScope(scope);
+			this._validateUserPermission(user.scp, scope);
+		}
 		return await this._usrSvc.addScope(uid, scope);
+	}
+
+	private _validateUserPermission(userScope: string[], scopeRequests: string[]) {
+		for (const scopeRequest of scopeRequests) {
+			const gameId = scopeRequest.split(':')[1]; // games:{gameId}:action
+			if (!userScope.includes(`games:${gameId}:update`)) {
+				throw new ForbiddenException(`Don't have permission to update game ${gameId}`);
+			}
+		}
+	}
+
+	private _validateGameScope(scope: string[]) {
+		const gameScopeRegex = /^games:(?:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}):(.+)$/;
+		const isInvalid = scope.some((scp) => !gameScopeRegex.test(scp));
+		if (isInvalid) {
+			throw new BadRequestException('Scope should have format games:{gameId}:{action}');
+		}
 	}
 
 	@Put(':uid/remove-scope')
 	public async removeScope(
 	@Param('uid') uid: string,
 		@Body() { scope }: dto.RemoveScopeDto,
+		@GetUser() user: HttpUser
 	) {
+		if (!user.scp.includes(ADMIN_SCOPE)) {
+			this._validateGameScope(scope);
+			this._validateUserPermission(user.scp, scope);
+		}
 		return await this._usrSvc.removeScope(uid, scope);
 	}
 }
