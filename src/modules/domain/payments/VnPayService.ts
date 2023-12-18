@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import qs from 'qs';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import moment from 'moment';
 
 import {
@@ -39,8 +39,10 @@ export class VnPayService implements IPaymentService {
 		@Inject(TUsr.USR_SVC) private readonly _usrSvc: IUserService,
 	) {}
 
-	public findAll(): Promise<PaymentDocument[]> {
-		return this._paymentModel.find().populate(['paidBy', 'bills']);
+	public findAll(status?: PaymentStatus): Promise<PaymentDocument[]> {
+		const filter: FilterQuery<PaymentDocument> = {};
+		status && Object.assign(filter, { status });
+		return this._paymentModel.find(filter).populate(['paidBy', 'bills']);
 	}
 
 	public async createPaymentUrl(uid: string, ipAddress: string, bills: Bill[],): Promise<string> {

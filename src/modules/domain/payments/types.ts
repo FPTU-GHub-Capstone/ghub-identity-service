@@ -9,7 +9,7 @@ export const enum Types {
 
 export interface IPaymentService {
 	createPaymentUrl(uid: string, ipAddress: string, bills: Bill[]): Promise<string>;
-	findAll(): Promise<PaymentDocument[]>;
+	findAll(status?: PaymentStatus): Promise<PaymentDocument[]>;
 	vnpIpn(inpParams: VnpIpnParams): Promise<VnpPaymentResponse>;
 }
 

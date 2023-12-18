@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { Body, Controller, Get, HttpStatus, Inject, Ip, Post, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Inject, Ip, Post, Query, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
@@ -65,7 +65,7 @@ export class PaymentController {
 	}
 
 	@Get()
-	public async findAll() {
-		return await this._vnPaySvc.findAll();
+	public async findAll(@Query(new ValidationPipe({ transform: true })) { status }: dto.PaymentsQuery) {
+		return await this._vnPaySvc.findAll(status);
 	}
 }

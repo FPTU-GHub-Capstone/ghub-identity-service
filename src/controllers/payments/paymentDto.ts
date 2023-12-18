@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsMongoId, IsOptional } from 'class-validator';
+import { ArrayNotEmpty, IsEnum, IsMongoId, IsOptional } from 'class-validator';
+import { PaymentStatus } from 'src/modules/domain/payments';
 
 
 export class VnpIpnQuery {
@@ -67,4 +68,14 @@ export class CreateUrlDto {
 	@IsMongoId({ each: true })
 	@ApiProperty()
 	public bills?: string[];
+}
+
+export class PaymentsQuery {
+	@IsOptional()
+	@IsEnum(PaymentStatus)
+	@ApiProperty({
+		required: false,
+		enum: PaymentStatus,
+	})
+	public status?: PaymentStatus;
 }
