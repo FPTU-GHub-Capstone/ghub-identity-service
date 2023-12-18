@@ -21,4 +21,10 @@ export class BillsQuery {
 		enum: BillStatus,
 	})
 	public status?: BillStatus;
+
+	@IsOptional()
+	@ApiProperty({
+		required: false,
+	})
+	public gameId?: BillStatus;
 }

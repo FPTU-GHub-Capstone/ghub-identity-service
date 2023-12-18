@@ -32,11 +32,12 @@ export class BillService implements IBillService {
 		@Inject(TCntx.REQUEST_CONTEXT) private readonly _reqCnTx: IRequestContext,
 	) {}
 
-	public async findByUser(billIds?: string[], status?: BillStatus): Promise<BillDocument[]> {
+	public async findByUser(billIds?: string[], status?: BillStatus, gameId?: string): Promise<BillDocument[]> {
 		let bills: BillDocument[] = [];
 		const filter: FilterQuery<BillDocument> = {};
 		this._handleQueryByBillIds(filter, billIds);
 		this._handleQueryByStatus(filter, status);
+		this._handleQueryByGameId(filter, gameId);
 		const currentScp = this._reqCnTx.getScope();
 		if (currentScp.includes('games:*:get')) {
 			bills = await this.find(filter, undefined);
@@ -55,6 +56,10 @@ export class BillService implements IBillService {
 
 	private _handleQueryByStatus(filter: FilterQuery<BillDocument>, status?: BillStatus) {
 		status && Object.assign(filter, { status });
+	}
+
+	private _handleQueryByGameId(filter: FilterQuery<BillDocument>, gameId?: string) {
+		gameId && Object.assign(filter, { gameId });
 	}
 
 	private _handleQueryByBillIds(filter: FilterQuery<BillDocument>, billIds?: string[]) {

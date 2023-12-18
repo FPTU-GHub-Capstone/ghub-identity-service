@@ -38,7 +38,7 @@ export class BillController {
 
 	@Get()
 	public async getAll(@Query(new ValidationPipe({ transform: true })) billsQuery?: dto.BillsQuery) {
-		const { bills: billIds, status } = billsQuery;
+		const { bills: billIds, status, gameId } = billsQuery;
 		let filteredBillIds: string[] = [];
 		if (typeof billIds === 'string') {
 			filteredBillIds = [billIds];
@@ -46,7 +46,7 @@ export class BillController {
 		else {
 			filteredBillIds = billIds;
 		}
-		const bills = await this._billSvc.findByUser(filteredBillIds, status);
+		const bills = await this._billSvc.findByUser(filteredBillIds, status, gameId);
 		return { bills };
 	}
 

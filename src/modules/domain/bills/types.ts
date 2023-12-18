@@ -15,7 +15,7 @@ export interface IGHubJobs {
 }
 
 export interface IBillService {
-	findByUser(billIds?: string[], status?: BillStatus): Promise<BillDocument[]>;
+	findByUser(billIds?: string[], status?: BillStatus, gameId?: string): Promise<BillDocument[]>;
 	findOne(
 		filter: FilterQuery<BillDocument>,
 		projection?: ProjectionType<BillDocument>,
