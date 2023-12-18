@@ -61,4 +61,10 @@ export class BillController {
 	public fireBillOverdueJob() {
 		this._bgJobs.fireBillOverdueJob();
 	}
+
+	@Public()
+	@Post('remind-unpaid-bills')
+	public fireBillBillReminderJob() {
+		this._bgJobs.fireBillBillReminderJob();
+	}
 }

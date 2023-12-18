@@ -12,6 +12,7 @@ export const enum Types {
 export interface IGHubJobs {
 	fireBillCreationJob(): void;
 	fireBillOverdueJob(): void;
+	fireBillBillReminderJob(): void;
 }
 
 export interface IBillService {

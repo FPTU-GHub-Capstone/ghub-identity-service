@@ -24,6 +24,7 @@ const VNPAY_MINIMUM_AMOUNT_TRANSACTION = 10000;
 export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 	private _billCreationJob: CronJob;
 	private _billOverdueJob: CronJob;
+	private _billReminderJob: CronJob;
 
 	constructor(
 		@InjectModel(DomainModels.BILL) private readonly _billModel: Model<Bill>,
@@ -32,9 +33,30 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 		@Inject(TConfig.CFG_SVC) private readonly _cfgSvc: AppConfigurationService
 	) {}
 
+
 	public onModuleInit() {
 		this._billCreationJob = this._buildBillCreationJob();
 		this._billOverdueJob = this._buildBillOverdueJob();
+		this._billReminderJob = this._buildBillReminderJob();
+	}
+
+	private _buildBillReminderJob() {
+		return CronJob.from({
+			cronTime: '0 7 1-4 * *',
+			onTick: this._billReminderOnTick.bind(this),
+			start: true,
+			timeZone: 'Asia/Ho_Chi_Minh',
+		});
+	}
+
+	private async _billReminderOnTick() {
+		try {
+
+		}
+		catch (err) {
+			this._logger.error('_billReminderOnTick error', err);
+			// throw new err;
+		}
 	}
 
 	private _buildBillOverdueJob() {
@@ -61,6 +83,8 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 				{ new: true },
 			);
 			// inactive game
+			const gameIds = unpaidBills.map((bill) => bill.gameId);
+			await this._gameSvc.updateStatus(Array.from(new Set(gameIds)), false);
 		}
 		catch (err) {
 			this._logger.error('_billOverdueOnTick error', err);
@@ -114,5 +138,9 @@ export class BillProcessJobs implements OnModuleInit, IGHubJobs {
 
 	public fireBillCreationJob(): void {
 		this._billCreationJob.fireOnTick();
+	}
+
+	public fireBillBillReminderJob(): void {
+		this._billReminderJob.fireOnTick();
 	}
 }

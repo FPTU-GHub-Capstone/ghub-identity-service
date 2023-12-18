@@ -17,6 +17,7 @@ import {
 const REQUEST_TIMEOUT = 60000;
 const GET_GAME_SCOPE = 'games:*:get';
 const RESET_GAME_RECORD_SCOPE = 'games:*:resetrecords';
+const UPDATE_GAME_STATUS_SCOPE = 'games:*:updatestatus';
 
 @Injectable()
 export class GameService implements IGameService {
@@ -25,6 +26,17 @@ export class GameService implements IGameService {
 		@Inject(TCfg.CFG_SVC) private readonly _cfgSvc: AppConfigurationService,
 		@Inject(TAuth.AUTH_SVC) private readonly _authSvc: IAuthService,
 	) {}
+
+	public updateStatus(gameIds: string[], status: boolean): Promise<void> {
+		return this._makeRequest(async (axiosInstance) => {
+			await axiosInstance.put(
+				'/games/update-status', {
+					ids: gameIds,
+					isActive: status,
+				}
+			);
+		}, [UPDATE_GAME_STATUS_SCOPE]);
+	}
 
 	public resetRecords(gameIds: string[]): Promise<void> {
 		return this._makeRequest(async (axiosInstance) => {
