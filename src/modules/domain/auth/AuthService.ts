@@ -35,6 +35,7 @@ export class AuthService implements IAuthService {
 
 	public async exchangeToken(user: HttpUser): Promise<AccessTokenResponse> {
 		const usr = await this._usrSvc.findOne({ uid: user.uid });
+		this._checkUserStatus(usr);
 		const token: AccessTokenResponse = {
 			access_token: this._genUserToken(usr),
 			token_type: TokenTypes.BEARER,
@@ -97,6 +98,7 @@ export class AuthService implements IAuthService {
 
 	public async login(loginParams: LoginParam): Promise<AccessTokenResponse> {
 		const usr = await this._usrSvc.findOne({ username: loginParams.username });
+		this._checkUserStatus(usr);
 		await this._validatePassword(usr, loginParams.password);
 		const token: AccessTokenResponse = {
 			access_token: this._genUserToken(usr),
@@ -140,6 +142,7 @@ export class AuthService implements IAuthService {
 				status: true,
 			});
 		}
+		this._checkUserStatus(usr); // user != null
 		return usr;
 	}
 
@@ -187,7 +190,7 @@ export class AuthService implements IAuthService {
 	}
 
 	private _checkUserStatus(user: UserDocument) {
-		if (user.status === false) {
+		if (user.status === false) { // some  user status is undefined
 			throw new ForbiddenException('User has been inactive');
 		}
 	}
