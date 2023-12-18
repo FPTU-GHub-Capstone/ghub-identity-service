@@ -26,6 +26,9 @@ export class User {
 
 	@Prop({ required: true })
 	public scope: string;
+
+	@Prop()
+	public status: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

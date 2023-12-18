@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	ForbiddenException,
 	Get,
 	Inject,
 	Param,
@@ -9,11 +10,13 @@ import {
 	UseGuards,
 	ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FilterQuery } from 'mongoose';
 
+import { HttpUser } from '../../types';
 import { JwtAuthGuard } from '../../modules/domain/auth';
 import { IUserService, Types as TUser, User } from '../../modules/domain/users';
+import { GetUser } from '../../common/decorators';
 
 import * as dto from './userDto';
 
@@ -35,6 +38,18 @@ export class UserController {
 		username && Object.assign(filter, { username: { $regex: username } });
 		const users = await this._usrSvc.find(filter);
 		return { users };
+	}
+
+	@Put(':uid/update-status')
+	public async updateUserStatus(
+	@Param('uid') uid: string,
+		@Body() { status }: dto.UpdateUserStatusDto,
+		@GetUser() user: HttpUser
+	) {
+		if (!user.scp.includes('games:*:get')) {
+			throw new ForbiddenException();
+		}
+		return await this._usrSvc.update(uid, { status });
 	}
 
 	@Put(':uid/add-scope')

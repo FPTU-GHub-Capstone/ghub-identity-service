@@ -31,3 +31,10 @@ export class UsersQuery {
 	})
 	public username?: string;
 }
+
+
+export class UpdateUserStatusDto {
+	@IsNotEmpty()
+	@ApiProperty()
+	public status: boolean;
+}

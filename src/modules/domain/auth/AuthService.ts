@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
 /* eslint-disable max-lines */
-import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 
@@ -90,6 +90,7 @@ export class AuthService implements IAuthService {
 			password: await bcrypt.hash(registerParams.password, 8),
 			uid,
 			scope: this._cfgSvc.gmsDefaultScope,
+			status: true,
 		});
 		return newUser;
 	}
@@ -136,6 +137,7 @@ export class AuthService implements IAuthService {
 				...authenticatedUser,
 				uid,
 				scope: this._cfgSvc.gmsDefaultScope,
+				status: true,
 			});
 		}
 		return usr;
@@ -182,5 +184,11 @@ export class AuthService implements IAuthService {
 			scp: scp,
 		};
 		return this._jwtService.sign(payload);
+	}
+
+	private _checkUserStatus(user: UserDocument) {
+		if (user.status === false) {
+			throw new ForbiddenException('User has been inactive');
+		}
 	}
 }
