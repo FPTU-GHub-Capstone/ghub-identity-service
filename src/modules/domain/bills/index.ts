@@ -4,6 +4,7 @@ import { ExternalApiModule } from 'src/modules/externalApi';
 import { RequestContextModule } from 'src/modules/core/requestContext';
 
 import { DomainModels } from '../../../constants';
+import { UserModule } from '../users';
 
 import { BillSchema } from './Bill';
 import { BillProcessJobs } from './BillProcessJobs';
@@ -22,6 +23,7 @@ export * from './types';
 		]),
 		ExternalApiModule,
 		RequestContextModule,
+		UserModule,
 	],
 	providers: [
 		{

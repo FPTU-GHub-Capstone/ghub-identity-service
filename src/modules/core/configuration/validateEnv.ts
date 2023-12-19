@@ -60,6 +60,10 @@ class ApplicationVariables {
 	@IsNotEmpty()
 	@IsNumber()
 	public usd_to_vnd: number;
+
+	@IsNotEmpty()
+	@IsString()
+	public forward_mail_password: string;
 };
 
 class MongoVariables {

@@ -40,6 +40,10 @@ export class AppConfigurationService {
 		return this._configService.get('application.jwt_secret');
 	}
 
+	public get forwardMailPassword(): string {
+		return this._configService.get('application.forward_mail_password');
+	}
+
 	public get writeUnitPrice(): number {
 		return parseFloat(this._configService.get('application.wu_price'));
 	}
